@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Booking - Glassmorphism</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.4) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header Bar with Glass Effect */
+        .header-bar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border-radius: 0 0 25px 25px;
+            margin: 0 20px;
+            margin-top: 10px;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-logo {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .profile-logo:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-logo i {
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .greeting-message {
+            flex: 1;
+            text-align: center;
+        }
+
+        .greeting-message h2 {
+            color: #fff;
+            font-weight: 300;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            min-height: calc(100vh - 120px);
+        }
+
+        .booking-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            width: 100%;
+            max-width: 520px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 200;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        /* Location Form */
+        .location-form {
+            margin-bottom: 35px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 20px;
+            z-index: 2;
+        }
+
+        .source-icon {
+            color: #00f5a0;
+            font-size: 1.2rem;
+            filter: drop-shadow(0 2px 10px rgba(0, 245, 160, 0.3));
+        }
+
+        .destination-icon {
+            color: #ff6b9d;
+            font-size: 1.3rem;
+            filter: drop-shadow(0 2px 10px rgba(255, 107, 157, 0.3));
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 20px 20px 20px 55px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            font-size: 1rem;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            font-weight: 300;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 0 0 3px rgba(255, 255, 255, 0.1),
+                0 10px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-wrapper input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Date Section */
+        .date-section {
+            margin-bottom: 35px;
+        }
+
+        .date-section label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .date-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #journey-date {
+            flex: 1;
+            min-width: 220px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            color: #fff;
+            font-weight: 300;
+        }
+
+        #journey-date:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 0 0 3px rgba(255, 255, 255, 0.1),
+                0 10px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .date-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .date-btn {
+            padding: 15px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            font-size: 0.95rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            white-space: nowrap;
+        }
+
+        .date-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .date-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Search Button */
+        .search-btn {
+            width: 100%;
+            padding: 22px;
+            background: linear-gradient(135deg, rgba(120, 119, 198, 0.8) 0%, rgba(255, 119, 198, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 18px;
+            font-size: 1.2rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .search-btn:hover::before {
+            left: 100%;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(120, 119, 198, 0.4);
+            background: linear-gradient(135deg, rgba(120, 119, 198, 0.9) 0%, rgba(255, 119, 198, 0.9) 100%);
+        }
+
+        .search-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .search-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-bar {
+                padding: 15px 20px;
+                margin: 0 10px;
+                margin-top: 10px;
+                border-radius: 0 0 20px 20px;
+            }
+            
+            .greeting-message h2 {
+                font-size: 1.5rem;
+            }
+            
+            .booking-form {
+                padding: 35px 25px;
+                margin: 20px 10px;
+                border-radius: 25px;
+            }
+            
+            .form-title {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            
+            .date-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            #journey-date {
+                min-width: auto;
+                margin-bottom: 15px;
+            }
+            
+            .date-buttons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-logo {
+                width: 50px;
+                height: 50px;
+                margin-right: 15px;
+            }
+            
+            .profile-logo i {
+                font-size: 28px;
+            }
+            
+            .greeting-message h2 {
+                font-size: 1.3rem;
+            }
+            
+            .booking-form {
+                padding: 25px 20px;
+            }
+            
+            .date-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .date-btn {
+                width: 100%;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Header Bar -->
+    <header class="header-bar">
+        <div class="profile-section">
+            <div class="profile-logo">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </div>
+        <div class="greeting-message">
+            <h2>Hi User!</h2>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="booking-form">
+            <h1 class="form-title">Book Your Ride</h1>
+            
+            <!-- Location Form -->
+            <div class="location-form">
+                <div class="input-group">
+                    <label for="source">From</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-circle source-icon"></i>
+                        <input type="text" id="source" placeholder="Enter pickup location" required>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="destination">To</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-map-marker-alt destination-icon"></i>
+                        <input type="text" id="destination" placeholder="Enter destination" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Selection -->
+            <div class="date-section">
+                <label for="journey-date">Date of Journey</label>
+                <div class="date-controls">
+                    <input type="date" id="journey-date" required>
+                    <div class="date-buttons">
+                        <button type="button" class="date-btn" onclick="setToday()">Today</button>
+                        <button type="button" class="date-btn" onclick="setTomorrow()">Tomorrow</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <button class="search-btn" onclick="searchRides()">
+                <i class="fas fa-search"></i>
+                Search Rides
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Set today's date
+        function setToday() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('journey-date').value = formattedDate;
+        }
+
+        // Set tomorrow's date
+        function setTomorrow() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const formattedDate = tomorrow.toISOString().split('T')[0];
+            document.getElementById('journey-date').value = formattedDate;
+        }
+
+        // Search rides function
+        function searchRides() {
+            const source = document.getElementById('source').value;
+            const destination = document.getElementById('destination').value;
+            const date = document.getElementById('journey-date').value;
+            
+            if (!source || !destination || !date) {
+                // Custom alert with glassmorphism style
+                showCustomAlert('Please fill in all fields');
+                return;
+            }
+            
+            console.log('Searching rides:', { source, destination, date });
+            showCustomAlert(`Searching rides from ${source} to ${destination} on ${date}`);
+        }
+
+        // Custom alert function
+        function showCustomAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(255, 255, 255, 0.1);
+                    backdrop-filter: blur(25px);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 20px;
+                    padding: 30px;
+                    color: white;
+                    text-align: center;
+                    z-index: 1000;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+                    animation: fadeIn 0.3s ease;
+                    max-width: 90%;
+                ">
+                    <p style="margin-bottom: 20px; font-size: 1.1rem;">${message}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        padding: 12px 25px;
+                        background: rgba(255, 255, 255, 0.2);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        border-radius: 10px;
+                        color: white;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    ">OK</button>
+                </div>
+                <style>
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                    }
+                </style>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Set default date to today on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            setToday();
+        });
+    </script>
+</body>
+</html>
