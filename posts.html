@@ -82,6 +82,7 @@
             margin: 0 auto;
             position: relative;
             z-index: 1;
+            padding-bottom: 100px; /* Add padding to prevent FAB overlap */
         }
 
         /* Header Styles */
@@ -279,6 +280,11 @@
             margin-left: 1rem;
         }
 
+        /* Single button layout when only confirm is available */
+        .card-actions.single-button {
+            justify-content: center;
+        }
+
         .btn {
             padding: 0.5rem 1rem;
             border: none;
@@ -391,6 +397,96 @@
         .ride-info-icon {
             color: var(--success-color);
             margin-right: 0.5rem;
+        }
+
+        /* Floating Action Button (FAB) */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 64px;
+            height: 64px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50%;
+            box-shadow: 
+                0 8px 25px rgba(30, 58, 138, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .fab:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 15px 35px rgba(30, 58, 138, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .fab:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .fab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .fab:hover::before {
+            opacity: 1;
+        }
+
+        /* FAB Tooltip */
+        .fab-tooltip {
+            position: absolute;
+            right: calc(100% + 1rem);
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .fab-tooltip::after {
+            content: '';
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 6px solid transparent;
+            border-left-color: rgba(15, 23, 42, 0.95);
+        }
+
+        .fab:hover .fab-tooltip {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* No rides message */
@@ -531,7 +627,7 @@
         /* Responsive Design */
         @media (max-width: 640px) {
             .container {
-                padding: 0.5rem;
+                padding: 0.5rem 0.5rem 80px 0.5rem; /* Adjust bottom padding for mobile */
             }
             
             .header {
@@ -583,6 +679,19 @@
             .modal-content {
                 padding: 1.5rem;
             }
+
+            /* Adjust FAB for mobile */
+            .fab {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 56px;
+                height: 56px;
+                font-size: 1.25rem;
+            }
+
+            .fab-tooltip {
+                display: none; /* Hide tooltip on mobile */
+            }
         }
 
         @media (max-width: 480px) {
@@ -594,6 +703,14 @@
 
             .detail-item {
                 justify-content: center;
+            }
+
+            .fab {
+                bottom: 1rem;
+                right: 1rem;
+                width: 52px;
+                height: 52px;
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -625,8 +742,8 @@
 
         <!-- Rides List -->
         <div class="rides-container" id="ridesContainer">
-            <!-- Demo Ride 1 -->
-            <div class="ride-card" data-ride-id="1">
+            <!-- Demo Ride 1 - With Negotiation Enabled -->
+            <div class="ride-card" data-ride-id="1" data-negotiation-enabled="true">
                 <div class="card-header">
                     <div class="user-section">
                         <div class="profile-picture">
@@ -647,8 +764,8 @@
                             Confirm
                         </button>
                         <button class="btn btn-secondary negotiate-btn" data-rider="Arjun Sharma">
-                            <i class="fas fa-comments" style="margin-right: 6px;"></i>
-                            Chat
+                            <i class="fas fa-handshake" style="margin-right: 6px;"></i>
+                            Negotiate
                         </button>
                     </div>
                 </div>
@@ -688,8 +805,8 @@
                 </div>
             </div>
 
-            <!-- Demo Ride 2 -->
-            <div class="ride-card" data-ride-id="2">
+            <!-- Demo Ride 2 - With Negotiation Disabled -->
+            <div class="ride-card" data-ride-id="2" data-negotiation-enabled="false">
                 <div class="card-header">
                     <div class="user-section">
                         <div class="profile-picture">
@@ -704,15 +821,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-actions">
+                    <div class="card-actions single-button">
                         <button class="btn btn-primary confirm-ride-btn" data-rider="Priya Mehta" data-time="2:15 PM">
                             <i class="fas fa-check" style="margin-right: 6px;"></i>
                             Confirm
                         </button>
-                        <button class="btn btn-secondary negotiate-btn" data-rider="Priya Mehta">
-                            <i class="fas fa-comments" style="margin-right: 6px;"></i>
-                            Chat
-                        </button>
+                        <!-- Negotiation button is not rendered when negotiation is disabled -->
                     </div>
                 </div>
 
@@ -748,6 +862,12 @@
         </div>
     </div>
 
+    <!-- Floating Action Button -->
+    <button class="fab" id="createRideFab">
+        <span class="fab-tooltip">Create New Ride</span>
+        <i class="fas fa-plus"></i>
+    </button>
+
     <!-- Confirmation Modal -->
     <div class="modal" id="confirmationModal">
         <div class="modal-content">
@@ -776,12 +896,37 @@
     <script>
         class RideListings {
             constructor() {
+                this.rides = [
+                    {
+                        id: 1,
+                        rider: 'Arjun Sharma',
+                        time: '9:30 AM',
+                        date: 'Aug 11, 2025',
+                        seats: 3,
+                        luggage: true,
+                        gender: 'any',
+                        negotiationEnabled: true,
+                        rideInfo: "I'll be driving a white Honda City. Will pick up from main college gate and drop at platform 1. Please be on time as I have a train to catch at 10:15 AM. Contact me on WhatsApp for coordination."
+                    },
+                    {
+                        id: 2,
+                        rider: 'Priya Mehta',
+                        time: '2:15 PM',
+                        date: 'Aug 11, 2025',
+                        seats: 2,
+                        luggage: false,
+                        gender: 'female-only',
+                        negotiationEnabled: false,
+                        rideInfo: null
+                    }
+                ];
                 this.init();
             }
 
             init() {
                 this.bindEvents();
                 this.updateRouteInfo();
+                this.renderRides();
             }
 
             bindEvents() {
@@ -790,21 +935,9 @@
                     window.history.back();
                 });
 
-                // Confirm ride buttons
-                document.querySelectorAll('.confirm-ride-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const rider = e.target.closest('.confirm-ride-btn').dataset.rider;
-                        const time = e.target.closest('.confirm-ride-btn').dataset.time;
-                        this.showConfirmationModal(rider, time);
-                    });
-                });
-
-                // Negotiate buttons
-                document.querySelectorAll('.negotiate-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const rider = e.target.closest('.negotiate-btn').dataset.rider;
-                        this.handleNegotiation(rider);
-                    });
+                // Floating Action Button
+                document.getElementById('createRideFab').addEventListener('click', () => {
+                    this.redirectToCreateRide();
                 });
 
                 // Modal events
@@ -828,6 +961,148 @@
                     if (e.key === 'Escape') {
                         this.hideConfirmationModal();
                     }
+                });
+            }
+
+            redirectToCreateRide() {
+                // Show notification first
+                this.showSuccessNotification('Redirecting to create new ride...');
+                
+                // Simulate redirect after short delay
+                setTimeout(() => {
+                    // In a real application, you would redirect to the create ride page
+                    // window.location.href = '/create-ride';
+                    alert('Redirecting to Create New Ride page...');
+                }, 500);
+            }
+
+            renderRides() {
+                const container = document.getElementById('ridesContainer');
+                container.innerHTML = '';
+
+                this.rides.forEach(ride => {
+                    const rideCard = this.createRideCard(ride);
+                    container.appendChild(rideCard);
+                });
+
+                this.bindRideEvents();
+            }
+
+            createRideCard(ride) {
+                const card = document.createElement('div');
+                card.className = 'ride-card';
+                card.setAttribute('data-ride-id', ride.id);
+                card.setAttribute('data-negotiation-enabled', ride.negotiationEnabled);
+
+                // Create actions buttons based on negotiation status
+                const actionsClass = ride.negotiationEnabled ? 'card-actions' : 'card-actions single-button';
+                const negotiationButton = ride.negotiationEnabled ? 
+                    `<button class="btn btn-secondary negotiate-btn" data-rider="${ride.rider}">
+                        <i class="fas fa-handshake" style="margin-right: 6px;"></i>
+                        Negotiate
+                    </button>` : '';
+
+                // Create ride info section
+                const rideInfoSection = ride.rideInfo ? 
+                    `<div class="ride-info">
+                        <div class="ride-info-content">
+                            <i class="fas fa-info-circle ride-info-icon"></i>
+                            ${ride.rideInfo}
+                        </div>
+                    </div>` : '';
+
+                // Get appropriate icons and text
+                const luggageIcon = ride.luggage ? 'fas fa-suitcase' : 'fas fa-times-circle';
+                const luggageText = ride.luggage ? 'Luggage space' : 'No luggage';
+                
+                let genderIcon, genderText;
+                switch(ride.gender) {
+                    case 'female-only':
+                        genderIcon = 'fas fa-venus';
+                        genderText = 'Female only';
+                        break;
+                    case 'male-only':
+                        genderIcon = 'fas fa-mars';
+                        genderText = 'Male only';
+                        break;
+                    default:
+                        genderIcon = 'fas fa-users';
+                        genderText = 'Any gender';
+                }
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="user-section">
+                            <div class="profile-picture">
+                                ${ride.rider.split(' ').map(n => n[0]).join('')}
+                            </div>
+                            <div class="user-info">
+                                <div class="user-name">${ride.rider}</div>
+                                <div class="departure-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>${ride.date}</span>
+                                    <span class="time-badge">${ride.time}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="${actionsClass}">
+                            <button class="btn btn-primary confirm-ride-btn" data-rider="${ride.rider}" data-time="${ride.time}">
+                                <i class="fas fa-check" style="margin-right: 6px;"></i>
+                                Confirm
+                            </button>
+                            ${negotiationButton}
+                        </div>
+                    </div>
+
+                    <div class="ride-details">
+                        <div class="detail-item">
+                            <div class="detail-icon">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <div class="detail-text">
+                                <strong>${ride.seats}</strong> seats
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-icon">
+                                <i class="${luggageIcon}"></i>
+                            </div>
+                            <div class="detail-text">
+                                ${luggageText}
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-icon">
+                                <i class="${genderIcon}"></i>
+                            </div>
+                            <div class="detail-text">
+                                ${genderText}
+                            </div>
+                        </div>
+                    </div>
+
+                    ${rideInfoSection}
+                `;
+
+                return card;
+            }
+
+            bindRideEvents() {
+                // Confirm ride buttons
+                document.querySelectorAll('.confirm-ride-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const rider = e.target.closest('.confirm-ride-btn').dataset.rider;
+                        const time = e.target.closest('.confirm-ride-btn').dataset.time;
+                        this.showConfirmationModal(rider, time);
+                    });
+                });
+
+                // Negotiate buttons (only exist when negotiation is enabled)
+                document.querySelectorAll('.negotiate-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const rider = e.target.closest('.negotiate-btn').dataset.rider;
+                        this.handleNegotiation(rider);
+                    });
                 });
             }
 
@@ -891,12 +1166,12 @@
 
             handleNegotiation(rider) {
                 // Show notification and redirect to chat
-                this.showSuccessNotification(`Opening chat with ${rider}...`);
+                this.showSuccessNotification(`Opening negotiation with ${rider}...`);
                 
                 setTimeout(() => {
-                    // You would redirect to chat page with ride details
-                    alert(`Redirecting to chat with ${rider}. Current ride details will be shared.`);
-                    // window.location.href = `/chat?rider=${encodeURIComponent(rider)}&ride=${currentRideId}`;
+                    // You would redirect to negotiation/chat page with ride details
+                    alert(`Redirecting to negotiation with ${rider}. Current ride details will be shared.`);
+                    // window.location.href = `/negotiate?rider=${encodeURIComponent(rider)}&ride=${currentRideId}`;
                 }, 1000);
             }
 
@@ -921,22 +1196,8 @@
                 }, 3000);
             }
 
-            // Method to add more rides dynamically (for future use)
-            addRide(rideData) {
-                const ridesContainer = document.getElementById('ridesContainer');
-                const rideCard = this.createRideCard(rideData);
-                ridesContainer.appendChild(rideCard);
-                this.updateResultsCount();
-            }
-
-            createRideCard(rideData) {
-                // Implementation for creating ride cards dynamically
-                // This would be used when loading rides from an API
-            }
-
             updateResultsCount() {
-                const rideCards = document.querySelectorAll('.ride-card');
-                const count = rideCards.length;
+                const count = this.rides.length;
                 document.getElementById('resultsCount').innerHTML = `
                     <i class="fas fa-car" style="margin-right: 5px;"></i>
                     ${count} ride${count !== 1 ? 's' : ''} available
