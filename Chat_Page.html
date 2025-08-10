@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Negotiation Chat - Glassmorphism</title>
+    <title>Ride Negotiation Chat - Professional</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 25%, #FFFFFF 50%, #B0E0E6 75%, #87CEFA 100%);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
             min-height: 100vh;
@@ -36,23 +36,23 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.4) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, rgba(135, 206, 235, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(176, 224, 230, 0.25) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
 
         /* Header Bar */
         .header-bar {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(135, 206, 235, 0.3);
             padding: 20px 25px;
             display: flex;
             align-items: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(135, 206, 235, 0.2);
             border-radius: 0 0 25px 25px;
             margin: 0 20px;
             margin-bottom: 20px;
@@ -60,9 +60,9 @@
         }
 
         .back-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(135, 206, 235, 0.3);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(135, 206, 235, 0.5);
             border-radius: 50%;
             width: 45px;
             height: 45px;
@@ -75,12 +75,12 @@
         }
 
         .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(135, 206, 235, 0.5);
             transform: translateX(-3px);
         }
 
         .back-btn i {
-            color: #fff;
+            color: #4682B4;
             font-size: 18px;
         }
 
@@ -94,9 +94,9 @@
             width: 55px;
             height: 55px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.3) 0%, rgba(255, 255, 255, 0.8) 100%);
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(135, 206, 235, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -105,20 +105,20 @@
 
         .contact-avatar i {
             font-size: 24px;
-            color: #fff;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            color: #4682B4;
+            text-shadow: 0 2px 10px rgba(70, 130, 180, 0.3);
         }
 
         .contact-details h2 {
-            color: #fff;
+            color: #4682B4;
             font-size: 1.4rem;
-            font-weight: 300;
+            font-weight: 400;
             margin-bottom: 5px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 10px rgba(70, 130, 180, 0.2);
         }
 
         .ride-info {
-            color: rgba(255, 255, 255, 0.8);
+            color: #5A9FD4;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
@@ -126,8 +126,8 @@
         }
 
         .ride-info i {
-            color: #00f5a0;
-            filter: drop-shadow(0 2px 10px rgba(0, 245, 160, 0.3));
+            color: #87CEEB;
+            filter: drop-shadow(0 2px 10px rgba(135, 206, 235, 0.3));
         }
 
         /* Chat Container */
@@ -143,9 +143,9 @@
         /* Messages Area */
         .messages-area {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(135, 206, 235, 0.2);
             border-radius: 25px 25px 10px 10px;
             padding: 25px;
             overflow-y: auto;
@@ -153,6 +153,7 @@
             flex-direction: column;
             gap: 15px;
             margin-bottom: 5px;
+            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.15);
         }
 
         /* Message Bubbles */
@@ -173,35 +174,47 @@
             padding: 15px 20px;
             border-radius: 20px;
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(135, 206, 235, 0.2);
             position: relative;
             word-wrap: break-word;
         }
 
         .message.sent .message-bubble {
-            background: linear-gradient(135deg, rgba(120, 119, 198, 0.8) 0%, rgba(79, 70, 229, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
             border-radius: 20px 20px 5px 20px;
+            color: white;
         }
 
         .message.received .message-bubble {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(135, 206, 235, 0.2);
             border-radius: 20px 20px 20px 5px;
         }
 
         .message-text {
-            color: #fff;
             font-size: 1rem;
             line-height: 1.4;
             margin-bottom: 8px;
         }
 
+        .message.sent .message-text {
+            color: #fff;
+        }
+
+        .message.received .message-text {
+            color: #4682B4;
+        }
+
         .message-time {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
             text-align: right;
         }
 
+        .message.sent .message-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
         .message.received .message-time {
+            color: rgba(70, 130, 180, 0.7);
             text-align: left;
         }
 
@@ -212,15 +225,16 @@
         }
 
         .system-message .message-bubble {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(135, 206, 235, 0.15);
             border-radius: 15px;
             text-align: center;
             padding: 12px 20px;
+            border: 1px solid rgba(135, 206, 235, 0.3);
         }
 
         .system-message .message-text {
             font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: #4682B4;
             margin-bottom: 0;
         }
 
@@ -235,9 +249,9 @@
 
         .quick-action-btn {
             padding: 12px 24px;
-            background: linear-gradient(135deg, rgba(0, 245, 160, 0.8) 0%, rgba(79, 172, 254, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(135, 206, 235, 0.4);
             border-radius: 20px;
             color: white;
             font-size: 1rem;
@@ -245,13 +259,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 10px rgba(70, 130, 180, 0.3);
         }
 
         .quick-action-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 245, 160, 0.4);
-            background: linear-gradient(135deg, rgba(0, 245, 160, 0.9) 0%, rgba(79, 172, 254, 0.9) 100%);
+            box-shadow: 0 15px 35px rgba(135, 206, 235, 0.4);
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.9) 0%, rgba(70, 130, 180, 0.9) 100%);
         }
 
         .quick-action-btn:active {
@@ -264,14 +278,14 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(135, 206, 235, 0.3);
             border-radius: 25px;
             padding: 35px;
-            color: white;
+            color: #4682B4;
             z-index: 1000;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 25px 60px rgba(135, 206, 235, 0.3);
             animation: fadeInScale 0.4s ease;
             max-width: 90%;
             width: 400px;
@@ -284,9 +298,10 @@
 
         .modal-title {
             font-size: 1.3rem;
-            font-weight: 300;
+            font-weight: 400;
             margin-bottom: 20px;
             text-align: center;
+            color: #4682B4;
         }
 
         .time-input-group {
@@ -296,27 +311,28 @@
         .time-input-group label {
             display: block;
             margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.9);
+            color: #5A9FD4;
             font-size: 0.95rem;
+            font-weight: 400;
         }
 
         .time-input {
             width: 100%;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(135, 206, 235, 0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(135, 206, 235, 0.3);
             border-radius: 15px;
-            color: #fff;
+            color: #4682B4;
             font-size: 1rem;
             transition: all 0.3s ease;
         }
 
         .time-input:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+            border-color: rgba(70, 130, 180, 0.6);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.2);
         }
 
         .modal-buttons {
@@ -327,9 +343,8 @@
 
         .modal-btn {
             padding: 12px 25px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(135, 206, 235, 0.4);
             border-radius: 15px;
-            color: white;
             font-size: 1rem;
             font-weight: 300;
             cursor: pointer;
@@ -338,11 +353,13 @@
         }
 
         .modal-btn.confirm {
-            background: linear-gradient(135deg, rgba(0, 245, 160, 0.8) 0%, rgba(79, 172, 254, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
+            color: white;
         }
 
         .modal-btn.cancel {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.8);
+            color: #4682B4;
         }
 
         .modal-btn:hover {
@@ -351,24 +368,25 @@
 
         /* Input Area */
         .input-area {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(135, 206, 235, 0.3);
             border-radius: 10px 10px 25px 25px;
             padding: 20px;
             display: flex;
             align-items: flex-end;
             gap: 15px;
+            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.15);
         }
 
         .message-input {
             flex: 1;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(135, 206, 235, 0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(135, 206, 235, 0.3);
             border-radius: 20px;
             padding: 15px 20px;
-            color: #fff;
+            color: #4682B4;
             font-size: 1rem;
             resize: none;
             min-height: 50px;
@@ -378,21 +396,21 @@
 
         .message-input:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+            border-color: rgba(70, 130, 180, 0.6);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.2);
         }
 
         .message-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(70, 130, 180, 0.6);
         }
 
         .send-btn {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, rgba(120, 119, 198, 0.8) 0%, rgba(79, 70, 229, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(135, 206, 235, 0.4);
             border-radius: 50%;
             color: white;
             cursor: pointer;
@@ -405,7 +423,7 @@
 
         .send-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 10px 30px rgba(120, 119, 198, 0.4);
+            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.4);
         }
 
         .send-btn:active {
@@ -423,8 +441,8 @@
         }
 
         .typing-bubble {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(135, 206, 235, 0.2);
+            border: 1px solid rgba(135, 206, 235, 0.3);
             border-radius: 20px 20px 20px 5px;
             padding: 15px 20px;
             backdrop-filter: blur(20px);
@@ -438,7 +456,7 @@
         .typing-dot {
             width: 8px;
             height: 8px;
-            background: rgba(255, 255, 255, 0.6);
+            background: #4682B4;
             border-radius: 50%;
             animation: typingBounce 1.4s infinite;
         }
@@ -549,18 +567,18 @@
         }
 
         .messages-area::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(135, 206, 235, 0.1);
             border-radius: 10px;
         }
 
         .messages-area::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(135, 206, 235, 0.4);
             border-radius: 10px;
             backdrop-filter: blur(10px);
         }
 
         .messages-area::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(70, 130, 180, 0.6);
         }
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -616,7 +634,7 @@
             <div class="message system-message">
                 <div class="message-bubble">
                     <div class="message-text">
-                        <i class="fas fa-handshake" style="margin-right: 8px; color: #4facfe;"></i>
+                        <i class="fas fa-handshake" style="margin-right: 8px; color: #87CEEB;"></i>
                         Negotiation chat started for Bangalore → Chennai ride
                     </div>
                 </div>
@@ -800,10 +818,10 @@
             systemMessage.innerHTML = `
                 <div class="message-bubble">
                     <div class="message-text">
-                        <i class="fas fa-check-circle" style="margin-right: 8px; color: #00f5a0;"></i>
+                        <i class="fas fa-check-circle" style="margin-right: 8px; color: #87CEEB;"></i>
                         Ride confirmed for ${formattedDate} at ${formattedTime}
                         <br><br>
-                        <i class="fas fa-arrow-right" style="margin-right: 8px; color: #4facfe;"></i>
+                        <i class="fas fa-arrow-right" style="margin-right: 8px; color: #4682B4;"></i>
                         This ride has been moved to your Confirmed Rides section
                     </div>
                 </div>
@@ -849,15 +867,15 @@
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
-                    background: rgba(255, 255, 255, 0.1);
+                    background: rgba(255, 255, 255, 0.95);
                     backdrop-filter: blur(25px);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border: 1px solid rgba(135, 206, 235, 0.3);
                     border-radius: 25px;
                     padding: 35px;
-                    color: white;
+                    color: #4682B4;
                     text-align: center;
                     z-index: 1000;
-                    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+                    box-shadow: 0 25px 60px rgba(135, 206, 235, 0.3);
                     animation: fadeInScale 0.4s ease;
                     max-width: 90%;
                     max-width: 450px;
@@ -865,19 +883,16 @@
                     <div style="margin-bottom: 25px; font-size: 1.1rem; line-height: 1.6;">${message}</div>
                     <button onclick="this.parentElement.parentElement.remove()" style="
                         padding: 15px 30px;
-                        background: rgba(255, 255, 255, 0.2);
+                        background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
                         backdrop-filter: blur(10px);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        border: 1px solid rgba(135, 206, 235, 0.4);
                         border-radius: 15px;
                         color: white;
                         cursor: pointer;
                         transition: all 0.3s ease;
                         font-size: 1rem;
                         font-weight: 300;
-                    " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" 
-                       onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
-                        OK
-                    </button>
+                    ">OK</button>
                 </div>
                 <style>
                     @keyframes fadeInScale {
