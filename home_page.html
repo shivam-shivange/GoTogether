@@ -3,8 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Booking - Glassmorphism</title>
+    <title>RideShare - Home</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 50%, #0f172a 100%);
+            --secondary-gradient: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --form-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --input-bg: rgba(30, 41, 59, 0.8);
+            --success-color: #3b82f6;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-dark: #0f172a;
+            --bg-light: rgba(59, 130, 246, 0.1);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --shadow-glass: 0 8px 32px 0 rgba(30, 58, 138, 0.4);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,122 +32,78 @@
         }
 
         body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, 
+                #1e3a8a 0%,     /* Blue */
+                #1e1b4b 25%,    /* Dark Blue */
+                #0f172a 50%,    /* Black */
+                #1e40af 75%,    /* Medium Blue */
+                #ffffff 100%);  /* White */
             min-height: 100vh;
-            color: #333;
+            padding: 1rem;
+            position: relative;
             overflow-x: hidden;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Floating particles */
+        /* Animated background elements */
         body::before {
             content: '';
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.4) 0%, transparent 50%);
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:rgba(59,130,246,0.3)"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.1)"/></radialGradient></defs><circle cx="200" cy="200" r="150" fill="url(%23a)"/><circle cx="800" cy="300" r="100" fill="url(%23a)"/><circle cx="600" cy="700" r="200" fill="url(%23a)"/><circle cx="100" cy="600" r="80" fill="url(%23a)"/><circle cx="900" cy="800" r="120" fill="url(%23a)"/></svg>') no-repeat center center;
+            background-size: cover;
             pointer-events: none;
-            z-index: -1;
+            animation: float 20s ease-in-out infinite;
         }
 
-        /* Header Bar with Glass Effect */
-        .header-bar {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 20px 25px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(59,130,246,0.1)"/><circle cx="75" cy="25" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="25" cy="75" r="0.7" fill="rgba(30,58,138,0.08)"/><circle cx="75" cy="75" r="1.2" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(-10px) rotate(-1deg); }
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
             position: relative;
-            border-radius: 0 0 25px 25px;
-            margin: 0 20px;
-            margin-top: 10px;
+            z-index: 1;
         }
 
-        .profile-section {
-            display: flex;
-            align-items: center;
-        }
-
-        .profile-logo {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .profile-logo:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .profile-logo i {
-            font-size: 32px;
-            color: #fff;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .greeting-message {
-            flex: 1;
-            text-align: center;
-        }
-
-        .greeting-message h2 {
-            color: #fff;
-            font-weight: 300;
-            font-size: 1.8rem;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0.5px;
-        }
-
-        /* Main Container */
-        .main-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
-            min-height: calc(100vh - 120px);
-        }
-
-        .booking-form {
-            background: rgba(255, 255, 255, 0.1);
+        /* Header with Profile Menu */
+        .header {
+            background: var(--form-bg);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 50px;
-            border-radius: 30px;
+            border-radius: 20px;
             box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            width: 100%;
-            max-width: 520px;
+                0 8px 32px 0 rgba(15, 23, 42, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
             position: relative;
-            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .booking-form::before {
+        .header::before {
             content: '';
             position: absolute;
             top: 0;
@@ -137,443 +113,456 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
-        .form-title {
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--success-color);
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .logo-text h1 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .logo-text p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Hamburger Menu */
+        .profile-menu {
+            position: relative;
+        }
+
+        .hamburger-btn {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--success-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .hamburger-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 1rem);
+            right: 0;
+            background: var(--form-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px 0 rgba(15, 23, 42, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--success-color);
+        }
+
+        .dropdown-item i {
+            width: 20px;
             text-align: center;
-            margin-bottom: 40px;
-            color: #fff;
-            font-size: 2.2rem;
-            font-weight: 200;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-            letter-spacing: 1px;
         }
 
-        /* Location Form */
-        .location-form {
-            margin-bottom: 35px;
+        /* Search Section */
+        .search-section {
+            background: var(--form-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px 0 rgba(15, 23, 42, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 2rem;
+            position: relative;
+            z-index: -1;
         }
 
-        .input-group {
-            margin-bottom: 25px;
+        .search-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
-        .input-group label {
+        .search-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            font-size: 1.875rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
             display: block;
-            margin-bottom: 12px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .input-wrapper {
             position: relative;
-            display: flex;
-            align-items: center;
         }
 
-        .input-wrapper i {
-            position: absolute;
-            left: 20px;
-            z-index: 2;
-        }
-
-        .source-icon {
-            color: #00f5a0;
-            font-size: 1.2rem;
-            filter: drop-shadow(0 2px 10px rgba(0, 245, 160, 0.3));
-        }
-
-        .destination-icon {
-            color: #ff6b9d;
-            font-size: 1.3rem;
-            filter: drop-shadow(0 2px 10px rgba(255, 107, 157, 0.3));
-        }
-
-        .input-wrapper input {
+        .form-group input,
+        .form-group select {
             width: 100%;
-            padding: 20px 20px 20px 55px;
+            padding: 1rem 1.25rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 18px;
+            border-radius: 16px;
             font-size: 1rem;
-            transition: all 0.4s ease;
-            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--input-bg);
             backdrop-filter: blur(10px);
-            color: #fff;
-            font-weight: 300;
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-family: inherit;
         }
 
-        .input-wrapper input:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 
-                0 0 0 3px rgba(255, 255, 255, 0.1),
-                0 10px 40px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .input-wrapper input::placeholder {
+        .form-group input::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
 
-        /* Date Section */
-        .date-section {
-            margin-bottom: 35px;
-        }
-
-        .date-section label {
-            display: block;
-            margin-bottom: 15px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .date-controls {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        #journey-date {
-            flex: 1;
-            min-width: 220px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 18px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            transition: all 0.4s ease;
-            color: #fff;
-            font-weight: 300;
-        }
-
-        #journey-date:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 
-                0 0 0 3px rgba(255, 255, 255, 0.1),
-                0 10px 40px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .date-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .date-btn {
-            padding: 15px 25px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            font-size: 0.95rem;
-            font-weight: 300;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            white-space: nowrap;
-        }
-
-        .date-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .date-btn:active {
-            transform: translateY(-1px);
-        }
-
-        /* Search Button */
-        .search-btn {
-            width: 100%;
-            padding: 22px;
-            background: linear-gradient(135deg, rgba(120, 119, 198, 0.8) 0%, rgba(255, 119, 198, 0.8) 100%);
-            backdrop-filter: blur(20px);
+        .form-group select option {
+            background: rgba(15, 23, 42, 0.95);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 18px;
-            font-size: 1.2rem;
-            font-weight: 300;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 
+                0 0 0 3px rgba(59, 130, 246, 0.2),
+                0 0 20px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+            background: rgba(30, 58, 138, 0.3);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
+            gap: 0.5rem;
         }
 
-        .search-btn::before {
+        .btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.5s;
         }
 
-        .search-btn:hover::before {
+        .btn:hover::before {
             left: 100%;
         }
 
-        .search-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(120, 119, 198, 0.4);
-            background: linear-gradient(135deg, rgba(120, 119, 198, 0.9) 0%, rgba(255, 119, 198, 0.9) 100%);
+        .btn.primary {
+            background: rgba(30, 58, 138, 0.6);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
         }
 
-        .search-btn:active {
+        .btn.primary:hover {
             transform: translateY(-2px);
-        }
-
-        .search-btn i {
-            font-size: 1.1rem;
+            box-shadow: 0 15px 35px rgba(30, 58, 138, 0.4);
+            background: rgba(30, 58, 138, 0.7);
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .header-bar {
-                padding: 15px 20px;
-                margin: 0 10px;
-                margin-top: 10px;
-                border-radius: 0 0 20px 20px;
+        @media (max-width: 640px) {
+            .container {
+                padding: 0.5rem;
             }
             
-            .greeting-message h2 {
+            .header {
+                padding: 1rem 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .logo-section {
+                gap: 0.75rem;
+            }
+
+            .logo-icon {
+                font-size: 1.75rem;
+            }
+
+            .logo-text h1 {
+                font-size: 1.25rem;
+            }
+
+            .search-section {
+                padding: 1.5rem;
+            }
+
+            .search-section h2 {
                 font-size: 1.5rem;
             }
-            
-            .booking-form {
-                padding: 35px 25px;
-                margin: 20px 10px;
-                border-radius: 25px;
-            }
-            
-            .form-title {
-                font-size: 1.8rem;
-                margin-bottom: 30px;
-            }
-            
-            .date-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            #journey-date {
-                min-width: auto;
-                margin-bottom: 15px;
-            }
-            
-            .date-buttons {
-                justify-content: center;
-            }
-        }
 
-        @media (max-width: 480px) {
-            .profile-logo {
-                width: 50px;
-                height: 50px;
-                margin-right: 15px;
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
             }
-            
-            .profile-logo i {
-                font-size: 28px;
-            }
-            
-            .greeting-message h2 {
-                font-size: 1.3rem;
-            }
-            
-            .booking-form {
-                padding: 25px 20px;
-            }
-            
-            .date-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .date-btn {
-                width: 100%;
-            }
-        }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            .dropdown-menu {
+                right: -1rem;
+                min-width: 180px;
+            }
         }
     </style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Top Header Bar -->
-    <header class="header-bar">
-        <div class="profile-section">
-            <div class="profile-logo">
-                <i class="fas fa-user-circle"></i>
+    <div class="container">
+        <!-- Header with Logo and Profile Menu -->
+        <div class="header">
+            <div class="logo-section">
+                <i class="fas fa-car logo-icon"></i>
+                <div class="logo-text">
+                    <h1>RideShare</h1>
+                    <p>Connect. Share. Save.</p>
+                </div>
+            </div>
+
+            <div class="profile-menu">
+                <button class="hamburger-btn" id="profileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="my_rides.html" class="dropdown-item">
+                        <i class="fas fa-car"></i>
+                        <span>My Rides</span>
+                    </a>
+                    <a href="edit_profile.html" class="dropdown-item">
+                        <i class="fas fa-user-edit"></i>
+                        <span>Edit Profile</span>
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="greeting-message">
-            <h2>Hi User!</h2>
-        </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main-container">
-        <div class="booking-form">
-            <h1 class="form-title">Book Your Ride</h1>
-            
-            <!-- Location Form -->
-            <div class="location-form">
-                <div class="input-group">
-                    <label for="source">From</label>
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2>Find Your Ride</h2>
+            <form id="searchForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fromLocation">From</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="fromLocation" name="fromLocation" placeholder="Starting location" required>
+                            <i class="fas fa-map-marker-alt input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="toLocation">To</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="toLocation" name="toLocation" placeholder="Destination" required>
+                            <i class="fas fa-flag-checkered input-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="travelDate">Travel Date</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-circle source-icon"></i>
-                        <input type="text" id="source" placeholder="Enter pickup location" required>
+                        <input type="date" id="travelDate" name="travelDate" required>
+                        <i class="fas fa-calendar-alt input-icon"></i>
                     </div>
                 </div>
-                
-                <div class="input-group">
-                    <label for="destination">To</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-map-marker-alt destination-icon"></i>
-                        <input type="text" id="destination" placeholder="Enter destination" required>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Date Selection -->
-            <div class="date-section">
-                <label for="journey-date">Date of Journey</label>
-                <div class="date-controls">
-                    <input type="date" id="journey-date" required>
-                    <div class="date-buttons">
-                        <button type="button" class="date-btn" onclick="setToday()">Today</button>
-                        <button type="button" class="date-btn" onclick="setTomorrow()">Tomorrow</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Search Button -->
-            <button class="search-btn" onclick="searchRides()">
-                <i class="fas fa-search"></i>
-                Search Rides
-            </button>
+                <button type="submit" class="btn primary">
+                    <i class="fas fa-search"></i>
+                    <span>Search Rides</span>
+                </button>
+            </form>
         </div>
-    </main>
+    </div>
 
     <script>
-        // Set today's date
-        function setToday() {
-            const today = new Date();
-            const formattedDate = today.toISOString().split('T')[0];
-            document.getElementById('journey-date').value = formattedDate;
-        }
-
-        // Set tomorrow's date
-        function setTomorrow() {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const formattedDate = tomorrow.toISOString().split('T')[0];
-            document.getElementById('journey-date').value = formattedDate;
-        }
-
-        // Search rides function
-        function searchRides() {
-            const source = document.getElementById('source').value;
-            const destination = document.getElementById('destination').value;
-            const date = document.getElementById('journey-date').value;
-            
-            if (!source || !destination || !date) {
-                // Custom alert with glassmorphism style
-                showCustomAlert('Please fill in all fields');
-                return;
+        class HomePage {
+            constructor() {
+                this.init();
             }
-            
-            console.log('Searching rides:', { source, destination, date });
-            showCustomAlert(`Searching rides from ${source} to ${destination} on ${date}`);
-        }
 
-        // Custom alert function
-        function showCustomAlert(message) {
-            const alertDiv = document.createElement('div');
-            alertDiv.innerHTML = `
-                <div style="
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: rgba(255, 255, 255, 0.1);
-                    backdrop-filter: blur(25px);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    border-radius: 20px;
-                    padding: 30px;
-                    color: white;
-                    text-align: center;
-                    z-index: 1000;
-                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-                    animation: fadeIn 0.3s ease;
-                    max-width: 90%;
-                ">
-                    <p style="margin-bottom: 20px; font-size: 1.1rem;">${message}</p>
-                    <button onclick="this.parentElement.parentElement.remove()" style="
-                        padding: 12px 25px;
-                        background: rgba(255, 255, 255, 0.2);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
-                        border-radius: 10px;
-                        color: white;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                    ">OK</button>
-                </div>
-                <style>
-                    @keyframes fadeIn {
-                        from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-                        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-                    }
-                </style>
-            `;
-            document.body.appendChild(alertDiv);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                if (alertDiv.parentNode) {
-                    alertDiv.remove();
+            init() {
+                this.bindEvents();
+                this.setMinDate();
+            }
+
+            bindEvents() {
+                // Profile menu toggle
+                document.getElementById('profileMenuBtn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleProfileMenu();
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', () => {
+                    this.closeProfileMenu();
+                });
+
+                // Prevent menu close when clicking inside dropdown
+                document.getElementById('dropdownMenu').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+
+                // Search form submission
+                document.getElementById('searchForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleSearch();
+                });
+            }
+
+            toggleProfileMenu() {
+                const dropdown = document.getElementById('dropdownMenu');
+                dropdown.classList.toggle('show');
+            }
+
+            closeProfileMenu() {
+                const dropdown = document.getElementById('dropdownMenu');
+                dropdown.classList.remove('show');
+            }
+
+            setMinDate() {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('travelDate').min = today;
+            }
+
+            handleSearch() {
+                const fromLocation = document.getElementById('fromLocation').value;
+                const toLocation = document.getElementById('toLocation').value;
+                const travelDate = document.getElementById('travelDate').value;
+
+                if (!fromLocation || !toLocation || !travelDate) {
+                    alert('Please fill in all fields');
+                    return;
                 }
-            }, 5000);
+
+                // Create URL with search parameters
+                const searchParams = new URLSearchParams({
+                    from: fromLocation,
+                    to: toLocation,
+                    date: new Date(travelDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })
+                });
+
+                // Redirect to posts page with search parameters
+                window.location.href = `posts.html?${searchParams.toString()}`;
+            }
         }
 
-        // Set default date to today on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            setToday();
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            new HomePage();
         });
     </script>
 </body>

@@ -3,8 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile - Professional</title>
+    <title>RideShare - Edit Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 50%, #0f172a 100%);
+            --secondary-gradient: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --form-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --input-bg: rgba(30, 41, 59, 0.8);
+            --success-color: #3b82f6;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-dark: #0f172a;
+            --bg-light: rgba(59, 130, 246, 0.1);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --shadow-glass: 0 8px 32px 0 rgba(30, 58, 138, 0.4);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,12 +32,17 @@
         }
 
         body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 25%, #FFFFFF 50%, #B0E0E6 75%, #87CEFA 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, 
+                #1e3a8a 0%,     /* Blue */
+                #1e1b4b 25%,    /* Dark Blue */
+                #0f172a 50%,    /* Black */
+                #1e40af 75%,    /* Medium Blue */
+                #ffffff 100%);  /* White */
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
             min-height: 100vh;
-            color: #333;
+            color: white;
             overflow-x: hidden;
         }
 
@@ -36,32 +61,63 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(circle at 20% 50%, rgba(135, 206, 235, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(176, 224, 230, 0.25) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(30, 58, 138, 0.25) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(59,130,246,0.1)"/><circle cx="75" cy="25" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="25" cy="75" r="0.7" fill="rgba(30,58,138,0.08)"/><circle cx="75" cy="75" r="1.2" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(-10px) rotate(-1deg); }
         }
 
         /* Header Bar */
         .header-bar {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(135, 206, 235, 0.3);
+            background: var(--form-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
             padding: 20px 25px;
             display: flex;
             align-items: center;
-            box-shadow: 0 8px 32px rgba(135, 206, 235, 0.2);
+            box-shadow: var(--shadow-glass);
             border-radius: 0 0 25px 25px;
             margin: 0 20px;
             margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
         .back-btn {
-            background: rgba(135, 206, 235, 0.3);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(135, 206, 235, 0.5);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
             border-radius: 50%;
             width: 45px;
             height: 45px;
@@ -74,12 +130,13 @@
         }
 
         .back-btn:hover {
-            background: rgba(135, 206, 235, 0.5);
+            background: rgba(255, 255, 255, 0.2);
             transform: translateX(-3px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
         }
 
         .back-btn i {
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 18px;
         }
 
@@ -89,10 +146,10 @@
         }
 
         .header-title h1 {
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 1.8rem;
             font-weight: 300;
-            text-shadow: 0 2px 10px rgba(70, 130, 180, 0.3);
+            text-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
             letter-spacing: 1px;
         }
 
@@ -105,17 +162,17 @@
 
         /* Profile Header Card */
         .profile-header {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--form-bg);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(135, 206, 235, 0.3);
+            border: 1px solid var(--glass-border);
             border-radius: 25px;
             padding: 40px;
             margin-bottom: 25px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(135, 206, 235, 0.2);
+            box-shadow: var(--shadow-glass);
             transition: all 0.3s ease;
         }
 
@@ -126,12 +183,12 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(135, 206, 235, 0.6), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
         .profile-header:hover {
             transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(135, 206, 235, 0.25);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.4);
         }
 
         /* Profile Avatar with Upload Option */
@@ -145,26 +202,28 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.3) 0%, rgba(255, 255, 255, 0.8) 100%);
+            background: var(--secondary-gradient);
             backdrop-filter: blur(10px);
-            border: 3px solid rgba(135, 206, 235, 0.5);
+            border: 3px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
             overflow: hidden;
             position: relative;
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
         }
 
         .profile-avatar:hover {
             transform: scale(1.05);
-            border-color: rgba(70, 130, 180, 0.7);
+            border-color: rgba(59, 130, 246, 0.7);
+            box-shadow: 0 15px 35px rgba(30, 58, 138, 0.4);
         }
 
         .profile-avatar i {
             font-size: 48px;
-            color: #4682B4;
-            text-shadow: 0 2px 10px rgba(70, 130, 180, 0.3);
+            color: var(--text-primary);
+            text-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
         }
 
         .profile-avatar img {
@@ -181,26 +240,25 @@
             right: 0;
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
-            border: 3px solid #fff;
+            background: var(--secondary-gradient);
+            border: 3px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(70, 130, 180, 0.3);
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
         }
 
         .upload-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(70, 130, 180, 0.4);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.5);
         }
 
         .upload-btn i {
             color: #fff;
             font-size: 16px;
-            text-shadow: none;
         }
 
         .profile-image-input {
@@ -208,15 +266,15 @@
         }
 
         .profile-name {
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 1.6rem;
             font-weight: 400;
             margin-bottom: 8px;
-            text-shadow: 0 2px 10px rgba(70, 130, 180, 0.2);
+            text-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
         }
 
         .profile-email {
-            color: #5A9FD4;
+            color: var(--text-secondary);
             font-size: 1.1rem;
             margin-bottom: 15px;
         }
@@ -224,12 +282,14 @@
         .profile-status {
             display: inline-block;
             padding: 8px 20px;
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
+            background: var(--secondary-gradient);
             border-radius: 15px;
             color: white;
             font-size: 0.9rem;
             font-weight: 400;
-            text-shadow: 0 1px 5px rgba(70, 130, 180, 0.3);
+            text-shadow: 0 1px 5px rgba(30, 58, 138, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
 
         /* Information Cards */
@@ -241,16 +301,16 @@
         }
 
         .info-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--form-bg);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(135, 206, 235, 0.3);
+            border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 25px;
             position: relative;
             overflow: hidden;
             transition: all 0.4s ease;
-            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.15);
+            box-shadow: var(--shadow-glass);
         }
 
         .info-card::before {
@@ -260,13 +320,13 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(135, 206, 235, 0.6), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
         .info-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(135, 206, 235, 0.2);
-            border-color: rgba(70, 130, 180, 0.5);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.4);
+            border-color: rgba(59, 130, 246, 0.5);
         }
 
         .card-header {
@@ -283,15 +343,16 @@
             align-items: center;
             justify-content: center;
             margin-right: 15px;
+            background: rgba(59, 130, 246, 0.3);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(135, 206, 235, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .card-title {
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 1.2rem;
             font-weight: 400;
-            text-shadow: 0 2px 10px rgba(70, 130, 180, 0.2);
+            text-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
         }
 
         .card-content {
@@ -301,22 +362,24 @@
         }
 
         .info-item {
-            background: rgba(135, 206, 235, 0.1);
+            background: rgba(59, 130, 246, 0.1);
             border-radius: 15px;
             padding: 15px 20px;
-            border: 1px solid rgba(135, 206, 235, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
             cursor: pointer;
+            backdrop-filter: blur(10px);
         }
 
         .info-item:hover {
-            background: rgba(135, 206, 235, 0.2);
+            background: rgba(59, 130, 246, 0.2);
             transform: translateX(5px);
-            border-color: rgba(70, 130, 180, 0.4);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 5px 15px rgba(30, 58, 138, 0.2);
         }
 
         .info-label {
-            color: #5A9FD4;
+            color: var(--text-secondary);
             font-size: 0.9rem;
             margin-bottom: 5px;
             display: flex;
@@ -325,7 +388,7 @@
         }
 
         .info-value {
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 1.1rem;
             font-weight: 400;
             display: flex;
@@ -334,13 +397,13 @@
         }
 
         .edit-icon {
-            color: rgba(70, 130, 180, 0.6);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 16px;
             transition: all 0.3s ease;
         }
 
         .info-item:hover .edit-icon {
-            color: #4682B4;
+            color: var(--text-primary);
             transform: scale(1.2);
         }
 
@@ -350,14 +413,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--form-bg);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(135, 206, 235, 0.3);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
             border-radius: 25px;
             padding: 35px;
-            color: #4682B4;
+            color: var(--text-primary);
             z-index: 1000;
-            box-shadow: 0 25px 60px rgba(135, 206, 235, 0.3);
+            box-shadow: 0 25px 60px rgba(30, 58, 138, 0.5);
             animation: modalSlideIn 0.4s ease;
             max-width: 90%;
             width: 450px;
@@ -366,6 +430,16 @@
 
         .edit-modal.show {
             display: block;
+        }
+
+        .edit-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
         .modal-header {
@@ -377,34 +451,35 @@
         .modal-icon {
             width: 45px;
             height: 45px;
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.3) 0%, rgba(255, 255, 255, 0.8) 100%);
+            background: rgba(59, 130, 246, 0.3);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(135, 206, 235, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .modal-icon i {
-            color: #4682B4;
+            color: var(--text-primary);
         }
 
         .modal-title {
             font-size: 1.3rem;
             font-weight: 400;
-            color: #4682B4;
+            color: var(--text-primary);
         }
 
         .modal-input {
             width: 100%;
             padding: 18px 20px;
-            background: rgba(135, 206, 235, 0.1);
+            background: var(--input-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(135, 206, 235, 0.3);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
             border-radius: 15px;
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 1rem;
             font-weight: 300;
             margin-bottom: 20px;
@@ -413,13 +488,18 @@
 
         .modal-input:focus {
             outline: none;
-            border-color: rgba(70, 130, 180, 0.6);
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.2);
+            border-color: rgba(59, 130, 246, 0.6);
+            background: rgba(30, 58, 138, 0.3);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
         .modal-input::placeholder {
-            color: rgba(70, 130, 180, 0.6);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .modal-input option {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
         }
 
         .modal-buttons {
@@ -430,45 +510,59 @@
 
         .modal-btn {
             padding: 12px 25px;
-            border: 1px solid rgba(135, 206, 235, 0.4);
+            border: 1px solid var(--glass-border);
             border-radius: 15px;
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 1rem;
             font-weight: 300;
             cursor: pointer;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .modal-btn.save {
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
+            background: var(--secondary-gradient);
             color: white;
+            border-color: rgba(59, 130, 246, 0.4);
         }
 
         .modal-btn.cancel {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .modal-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3);
         }
 
         /* ID Card Upload Section */
         .upload-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--form-bg);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(135, 206, 235, 0.3);
+            border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 25px;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.15);
+            box-shadow: var(--shadow-glass);
+            position: relative;
+        }
+
+        .upload-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
 
         .upload-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(135, 206, 235, 0.2);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.4);
         }
 
         .upload-header {
@@ -480,12 +574,13 @@
         .upload-icon {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
+            background: var(--secondary-gradient);
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .upload-icon i {
@@ -494,46 +589,47 @@
         }
 
         .upload-title {
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 1.2rem;
             font-weight: 400;
         }
 
         .drop-zone {
-            border: 2px dashed rgba(135, 206, 235, 0.5);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
             border-radius: 15px;
             padding: 40px 20px;
             text-align: center;
-            background: rgba(135, 206, 235, 0.05);
+            background: rgba(59, 130, 246, 0.1);
             transition: all 0.3s ease;
             cursor: pointer;
+            backdrop-filter: blur(10px);
         }
 
         .drop-zone:hover {
-            border-color: rgba(70, 130, 180, 0.7);
-            background: rgba(135, 206, 235, 0.1);
+            border-color: rgba(59, 130, 246, 0.7);
+            background: rgba(59, 130, 246, 0.2);
         }
 
         .drop-zone.active {
-            border-color: #4682B4;
-            background: rgba(135, 206, 235, 0.15);
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.25);
         }
 
         .drop-icon {
             font-size: 48px;
-            color: #87CEEB;
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 15px;
         }
 
         .drop-text {
-            color: #4682B4;
+            color: var(--text-primary);
             font-size: 1.1rem;
             margin-bottom: 8px;
             font-weight: 400;
         }
 
         .drop-subtext {
-            color: #5A9FD4;
+            color: var(--text-secondary);
             font-size: 0.9rem;
         }
 
@@ -560,30 +656,33 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            text-shadow: 0 2px 10px rgba(70, 130, 180, 0.2);
+            text-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
             letter-spacing: 0.5px;
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(135, 206, 235, 0.4);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
         }
 
         .action-btn.save {
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
+            background: var(--secondary-gradient);
             color: white;
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
         }
 
         .action-btn.save:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(135, 206, 235, 0.4);
+            box-shadow: 0 20px 60px rgba(30, 58, 138, 0.5);
         }
 
         .action-btn.cancel {
-            background: rgba(255, 255, 255, 0.8);
-            color: #4682B4;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
         }
 
         .action-btn.cancel:hover {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(30, 58, 138, 0.3);
         }
 
         @keyframes modalSlideIn {
@@ -594,6 +693,39 @@
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Success notification */
+        .glass-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--form-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: var(--shadow-glass);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.3s ease-out;
+            max-width: 300px;
+            font-weight: 500;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
 
@@ -661,21 +793,19 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(135, 206, 235, 0.1);
-            border-radius: 10px;
+            background: rgba(30, 41, 59, 0.3);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(135, 206, 235, 0.4);
+            background: rgba(59, 130, 246, 0.4);
             border-radius: 10px;
             backdrop-filter: blur(10px);
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(70, 130, 180, 0.6);
+            background: rgba(59, 130, 246, 0.6);
         }
     </style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Header Bar -->
@@ -708,7 +838,7 @@
                 >
             </div>
             <div class="profile-name">John Doe</div>
-            <div class="profile-email">john.doe@university.edu</div>
+            <div class="profile-email">john.doe@pccoepune.org</div>
             <div class="profile-status">
                 <i class="fas fa-shield-alt" style="margin-right: 6px;"></i>
                 Verified Student
@@ -720,15 +850,15 @@
             <!-- Contact Information -->
             <div class="info-card">
                 <div class="card-header">
-                    <div class="card-icon" style="background: rgba(135, 206, 235, 0.3);">
-                        <i class="fas fa-address-book" style="color: #4682B4; font-size: 20px;"></i>
+                    <div class="card-icon">
+                        <i class="fas fa-address-book" style="color: #ffffff; font-size: 20px;"></i>
                     </div>
                     <div class="card-title">Contact Information</div>
                 </div>
                 <div class="card-content">
                     <div class="info-item" onclick="editField('phone', 'Phone Number', '+91 98765 43210')">
                         <div class="info-label">
-                            <i class="fas fa-phone" style="color: #87CEEB;"></i>
+                            <i class="fas fa-phone" style="color: rgba(255, 255, 255, 0.7);"></i>
                             Phone Number
                         </div>
                         <div class="info-value">
@@ -742,15 +872,15 @@
             <!-- Academic Information -->
             <div class="info-card">
                 <div class="card-header">
-                    <div class="card-icon" style="background: rgba(70, 130, 180, 0.3);">
-                        <i class="fas fa-graduation-cap" style="color: #4682B4; font-size: 20px;"></i>
+                    <div class="card-icon">
+                        <i class="fas fa-graduation-cap" style="color: #ffffff; font-size: 20px;"></i>
                     </div>
                     <div class="card-title">Academic Information</div>
                 </div>
                 <div class="card-content">
                     <div class="info-item" onclick="editField('branch', 'Branch/Course', 'Computer Engineering')">
                         <div class="info-label">
-                            <i class="fas fa-code" style="color: #87CEEB;"></i>
+                            <i class="fas fa-code" style="color: rgba(255, 255, 255, 0.7);"></i>
                             Branch/Course
                         </div>
                         <div class="info-value">
@@ -760,7 +890,7 @@
                     </div>
                     <div class="info-item" onclick="editSelect('year', 'Year of Study', '3rd Year')">
                         <div class="info-label">
-                            <i class="fas fa-calendar-alt" style="color: #87CEEB;"></i>
+                            <i class="fas fa-calendar-alt" style="color: rgba(255, 255, 255, 0.7);"></i>
                             Year of Study
                         </div>
                         <div class="info-value">
@@ -768,13 +898,13 @@
                             <i class="fas fa-edit edit-icon"></i>
                         </div>
                     </div>
-                    <div class="info-item" onclick="editField('university', 'University/College', 'Mumbai University')">
+                    <div class="info-item" onclick="editField('university', 'University/College', 'PCCOE Pune')">
                         <div class="info-label">
-                            <i class="fas fa-university" style="color: #87CEEB;"></i>
+                            <i class="fas fa-university" style="color: rgba(255, 255, 255, 0.7);"></i>
                             University/College
                         </div>
                         <div class="info-value">
-                            <span>Mumbai University</span>
+                            <span>PCCOE Pune</span>
                             <i class="fas fa-edit edit-icon"></i>
                         </div>
                     </div>
@@ -949,15 +1079,15 @@
             dropZone.innerHTML = `
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 15px;">
-                        <div style="width: 45px; height: 45px; background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <div style="width: 45px; height: 45px; background: var(--secondary-gradient); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-file-${file.type.startsWith('image/') ? 'image' : 'pdf'}" style="color: #fff; font-size: 18px;"></i>
                         </div>
                         <div>
-                            <div style="color: #4682B4; font-size: 1.1rem; margin-bottom: 3px; font-weight: 400;">${file.name}</div>
-                            <div style="color: #5A9FD4; font-size: 0.9rem;">${formatFileSize(file.size)}</div>
+                            <div style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 3px; font-weight: 400;">${file.name}</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">${formatFileSize(file.size)}</div>
                         </div>
                     </div>
-                    <button onclick="removeFile()" style="background: rgba(135, 206, 235, 0.8); border: 1px solid rgba(70, 130, 180, 0.4); border-radius: 50%; width: 35px; height: 35px; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    <button onclick="removeFile()" style="background: rgba(59, 130, 246, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; width: 35px; height: 35px; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -1017,7 +1147,7 @@
         function goBack() {
             showCustomAlert("Returning to previous page...");
             setTimeout(() => {
-                window.history.back();
+                window.location.href = 'home_page.html';
             }, 1500);
         }
 
@@ -1029,21 +1159,21 @@
                 <div style="display: flex; gap: 15px; justify-content: center; margin-top: 10px;">
                     <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
                         padding: 12px 25px;
-                        background: rgba(255, 255, 255, 0.8);
+                        background: rgba(255, 255, 255, 0.1);
                         backdrop-filter: blur(10px);
-                        border: 1px solid rgba(135, 206, 235, 0.4);
+                        border: 1px solid rgba(255, 255, 255, 0.2);
                         border-radius: 15px;
-                        color: #4682B4;
+                        color: var(--text-primary);
                         cursor: pointer;
                         transition: all 0.3s ease;
                         font-size: 0.95rem;
                         font-weight: 300;
                     ">Stay</button>
-                    <button onclick="window.history.back();" style="
+                    <button onclick="window.location.href = 'home_page.html';" style="
                         padding: 12px 25px;
-                        background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
+                        background: var(--secondary-gradient);
                         backdrop-filter: blur(10px);
-                        border: 1px solid rgba(135, 206, 235, 0.4);
+                        border: 1px solid rgba(59, 130, 246, 0.4);
                         border-radius: 15px;
                         color: white;
                         cursor: pointer;
@@ -1055,9 +1185,9 @@
             ` : `
                 <button onclick="this.parentElement.parentElement.remove()" style="
                     padding: 15px 30px;
-                    background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(70, 130, 180, 0.8) 100%);
+                    background: var(--secondary-gradient);
                     backdrop-filter: blur(10px);
-                    border: 1px solid rgba(135, 206, 235, 0.4);
+                    border: 1px solid rgba(59, 130, 246, 0.4);
                     border-radius: 15px;
                     color: white;
                     cursor: pointer;
@@ -1073,15 +1203,16 @@
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
-                    background: rgba(255, 255, 255, 0.95);
+                    background: var(--form-bg);
                     backdrop-filter: blur(25px);
-                    border: 1px solid rgba(135, 206, 235, 0.3);
+                    -webkit-backdrop-filter: blur(25px);
+                    border: 1px solid var(--glass-border);
                     border-radius: 25px;
                     padding: 35px;
-                    color: #4682B4;
+                    color: var(--text-primary);
                     text-align: center;
                     z-index: 1001;
-                    box-shadow: 0 25px 60px rgba(135, 206, 235, 0.3);
+                    box-shadow: 0 25px 60px rgba(30, 58, 138, 0.5);
                     animation: fadeInScale 0.4s ease;
                     max-width: 90%;
                     max-width: 450px;

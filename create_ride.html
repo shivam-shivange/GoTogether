@@ -721,7 +721,7 @@
                 // Back button
                 document.getElementById('backBtn').addEventListener('click', () => {
                     if (confirm('Are you sure you want to go back? Your ride details will be lost.')) {
-                        window.history.back();
+                        window.location.href = 'posts.html'; // Redirect to posts page
                     }
                 });
 

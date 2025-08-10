@@ -6,6 +6,7 @@
     <title>RideShare - Available Rides</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* Use the same CSS variables and styles from home page */
         :root {
             --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 50%, #0f172a 100%);
             --secondary-gradient: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
@@ -25,6 +26,7 @@
             --shadow-glass: 0 8px 32px 0 rgba(30, 58, 138, 0.4);
         }
 
+        /* Include all the common styles from home page */
         * {
             margin: 0;
             padding: 0;
@@ -34,18 +36,14 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, 
-                #1e3a8a 0%,     /* Blue */
-                #1e1b4b 25%,    /* Dark Blue */
-                #0f172a 50%,    /* Black */
-                #1e40af 75%,    /* Medium Blue */
-                #ffffff 100%);  /* White */
+                #1e3a8a 0%, #1e1b4b 25%, #0f172a 50%, #1e40af 75%, #ffffff 100%);
             min-height: 100vh;
             padding: 1rem;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Animated background elements */
+        /* Add the same background animations */
         body::before {
             content: '';
             position: absolute;
@@ -82,7 +80,7 @@
             margin: 0 auto;
             position: relative;
             z-index: 1;
-            padding-bottom: 100px; /* Add padding to prevent FAB overlap */
+            padding-bottom: 100px;
         }
 
         /* Header Styles */
@@ -272,7 +270,7 @@
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        /* Action Buttons - Now on the right and smaller */
+        /* Action Buttons */
         .card-actions {
             display: flex;
             flex-direction: column;
@@ -280,7 +278,6 @@
             margin-left: 1rem;
         }
 
-        /* Single button layout when only confirm is available */
         .card-actions.single-button {
             justify-content: center;
         }
@@ -344,7 +341,7 @@
             box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
         }
 
-        /* Ride Details Icons */
+        /* Ride Details */
         .ride-details {
             display: flex;
             gap: 2rem;
@@ -376,7 +373,7 @@
             font-weight: 500;
         }
 
-        /* Ride Info Section */
+        /* Ride Info */
         .ride-info {
             margin-top: 1rem;
             padding-top: 1rem;
@@ -399,7 +396,7 @@
             margin-right: 0.5rem;
         }
 
-        /* Floating Action Button (FAB) */
+        /* Floating Action Button */
         .fab {
             position: fixed;
             bottom: 2rem;
@@ -431,28 +428,6 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
-        .fab:active {
-            transform: translateY(-1px) scale(1.02);
-        }
-
-        .fab::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 50%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .fab:hover::before {
-            opacity: 1;
-        }
-
-        /* FAB Tooltip */
         .fab-tooltip {
             position: absolute;
             right: calc(100% + 1rem);
@@ -489,20 +464,7 @@
             visibility: visible;
         }
 
-        /* No rides message */
-        .no-rides {
-            text-align: center;
-            padding: 3rem 2rem;
-            color: var(--text-secondary);
-        }
-
-        .no-rides-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* Confirmation Modal */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -627,7 +589,7 @@
         /* Responsive Design */
         @media (max-width: 640px) {
             .container {
-                padding: 0.5rem 0.5rem 80px 0.5rem; /* Adjust bottom padding for mobile */
+                padding: 0.5rem 0.5rem 80px 0.5rem;
             }
             
             .header {
@@ -676,11 +638,6 @@
                 gap: 1rem;
             }
 
-            .modal-content {
-                padding: 1.5rem;
-            }
-
-            /* Adjust FAB for mobile */
             .fab {
                 bottom: 1.5rem;
                 right: 1.5rem;
@@ -690,7 +647,7 @@
             }
 
             .fab-tooltip {
-                display: none; /* Hide tooltip on mobile */
+                display: none;
             }
         }
 
@@ -763,9 +720,9 @@
                             <i class="fas fa-check" style="margin-right: 6px;"></i>
                             Confirm
                         </button>
-                        <button class="btn btn-secondary negotiate-btn" data-rider="Arjun Sharma">
+                        <button class="btn btn-secondary negotiate-btn" data-rider="Arjun Sharma" data-ride-id="1">
                             <i class="fas fa-handshake" style="margin-right: 6px;"></i>
-                            Negotiate
+                            Negotiation
                         </button>
                     </div>
                 </div>
@@ -826,7 +783,6 @@
                             <i class="fas fa-check" style="margin-right: 6px;"></i>
                             Confirm
                         </button>
-                        <!-- Negotiation button is not rendered when negotiation is disabled -->
                     </div>
                 </div>
 
@@ -856,8 +812,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- No ride info for this card - will not display anything -->
             </div>
         </div>
     </div>
@@ -932,7 +886,7 @@
             bindEvents() {
                 // Back button
                 document.getElementById('backBtn').addEventListener('click', () => {
-                    window.history.back();
+                    window.location.href = 'home_page.html';
                 });
 
                 // Floating Action Button
@@ -965,14 +919,9 @@
             }
 
             redirectToCreateRide() {
-                // Show notification first
                 this.showSuccessNotification('Redirecting to create new ride...');
-                
-                // Simulate redirect after short delay
                 setTimeout(() => {
-                    // In a real application, you would redirect to the create ride page
-                    // window.location.href = '/create-ride';
-                    alert('Redirecting to Create New Ride page...');
+                    window.location.href = 'create_ride.html';
                 }, 500);
             }
 
@@ -997,9 +946,9 @@
                 // Create actions buttons based on negotiation status
                 const actionsClass = ride.negotiationEnabled ? 'card-actions' : 'card-actions single-button';
                 const negotiationButton = ride.negotiationEnabled ? 
-                    `<button class="btn btn-secondary negotiate-btn" data-rider="${ride.rider}">
+                    `<button class="btn btn-secondary negotiate-btn" data-rider="${ride.rider}" data-ride-id="${ride.id}">
                         <i class="fas fa-handshake" style="margin-right: 6px;"></i>
-                        Negotiate
+                        Negotiation
                     </button>` : '';
 
                 // Create ride info section
@@ -1101,13 +1050,13 @@
                 document.querySelectorAll('.negotiate-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const rider = e.target.closest('.negotiate-btn').dataset.rider;
-                        this.handleNegotiation(rider);
+                        const rideId = e.target.closest('.negotiate-btn').dataset.rideId;
+                        this.handleNegotiation(rider, rideId);
                     });
                 });
             }
 
             updateRouteInfo() {
-                // You would typically get this data from URL parameters or passed data
                 const urlParams = new URLSearchParams(window.location.search);
                 const fromLocation = urlParams.get('from') || 'PCCOE Campus';
                 const toLocation = urlParams.get('to') || 'Pune Railway Station';
@@ -1120,7 +1069,6 @@
                     ${date}
                 `;
 
-                // Update page title
                 document.title = `RideShare - ${fromLocation} to ${toLocation}`;
             }
 
@@ -1141,19 +1089,16 @@
                 const rider = document.getElementById('riderName').textContent;
                 
                 try {
-                    // Show loading state
                     confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Booking...';
                     confirmBtn.disabled = true;
 
-                    // Simulate API call
                     await new Promise(resolve => setTimeout(resolve, 1500));
 
                     this.hideConfirmationModal();
-                    this.showSuccessNotification(`🎉 Ride booked successfully with ${rider}! Check your messages for details.`);
+                    this.showSuccessNotification(`🎉 Ride booked successfully with ${rider}! Check your rides.`);
 
-                    // You would typically redirect to bookings page or update the UI
                     setTimeout(() => {
-                        alert('Redirecting to your bookings...');
+                        window.location.href = 'my_rides.html';
                     }, 2000);
 
                 } catch (error) {
@@ -1164,14 +1109,18 @@
                 }
             }
 
-            handleNegotiation(rider) {
-                // Show notification and redirect to chat
+            handleNegotiation(rider, rideId) {
                 this.showSuccessNotification(`Opening negotiation with ${rider}...`);
                 
                 setTimeout(() => {
-                    // You would redirect to negotiation/chat page with ride details
-                    alert(`Redirecting to negotiation with ${rider}. Current ride details will be shared.`);
-                    // window.location.href = `/negotiate?rider=${encodeURIComponent(rider)}&ride=${currentRideId}`;
+                    // Redirect to chat page with ride details
+                    const searchParams = new URLSearchParams({
+                        rider: rider,
+                        rideId: rideId,
+                        from: document.getElementById('fromLocation').textContent,
+                        to: document.getElementById('toLocation').textContent
+                    });
+                    window.location.href = `chat_page.html?${searchParams.toString()}`;
                 }, 1000);
             }
 
@@ -1194,14 +1143,6 @@
                         }
                     }, 300);
                 }, 3000);
-            }
-
-            updateResultsCount() {
-                const count = this.rides.length;
-                document.getElementById('resultsCount').innerHTML = `
-                    <i class="fas fa-car" style="margin-right: 5px;"></i>
-                    ${count} ride${count !== 1 ? 's' : ''} available
-                `;
             }
         }
 
