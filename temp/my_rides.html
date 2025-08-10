@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Rides - Glassmorphism</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.4) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header Bar */
+        .header-bar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            margin: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header-bar h1 {
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 200;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        /* Main Container */
+        .main-container {
+            padding: 0 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 300;
+            transition: all 0.4s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Ride Cards */
+        .rides-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ride-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .ride-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+
+        .ride-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+        }
+
+        /* Profile Logo - Now on Left */
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-avatar i {
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .ride-info {
+            flex: 1;
+        }
+
+        .route {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .route-point {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 300;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .route-arrow {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+        }
+
+        .datetime {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .datetime i {
+            color: #00f5a0;
+            filter: drop-shadow(0 2px 10px rgba(0, 245, 160, 0.3));
+        }
+
+        /* Expand/Collapse Indicator */
+        .expand-indicator {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-indicator i {
+            transition: transform 0.3s ease;
+        }
+
+        .ride-card.expanded .expand-indicator i {
+            transform: rotate(180deg);
+        }
+
+        /* Multiple Companions Container - Initially Hidden */
+        .companions-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            margin-top: 0;
+        }
+
+        .companions-container.expanded {
+            max-height: 1000px;
+            margin-top: 20px;
+        }
+
+        .companions-title {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .companions-title i {
+            color: #4facfe;
+            filter: drop-shadow(0 2px 10px rgba(79, 172, 254, 0.3));
+        }
+
+        /* Individual Companion Details */
+        .companion-details {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .companions-container.expanded .companion-details {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .companions-container.expanded .companion-details:nth-child(2) { transition-delay: 0.1s; }
+        .companions-container.expanded .companion-details:nth-child(3) { transition-delay: 0.2s; }
+        .companions-container.expanded .companion-details:nth-child(4) { transition-delay: 0.3s; }
+
+        .companion-name {
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .companion-contact, .companion-education {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        /* Negotiate Button - Now Clickable */
+        .negotiate-btn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.8) 0%, rgba(255, 154, 0, 0.8) 100%);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 300;
+            cursor: pointer;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+            min-width: 150px;
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+            align-self: flex-start;
+        }
+
+        .negotiate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.9) 0%, rgba(255, 154, 0, 0.9) 100%);
+        }
+
+        .negotiate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .negotiate-btn.negotiating {
+            background: rgba(120, 119, 198, 0.8);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .negotiate-btn.negotiating:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Card content for pending rides */
+        .card-content.pending {
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-content.pending .negotiate-btn {
+            pointer-events: all;
+        }
+
+        /* Confirmed rides cursor override */
+        .confirmed-rides .ride-card .card-content {
+            pointer-events: none;
+        }
+
+        .confirmed-rides .ride-card {
+            pointer-events: all;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-bar {
+                margin: 15px;
+                padding: 20px;
+            }
+
+            .header-bar h1 {
+                font-size: 1.8rem;
+            }
+
+            .main-container {
+                padding: 0 15px 30px;
+            }
+
+            .card-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .card-content.pending {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .route {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .profile-avatar {
+                width: 70px;
+                height: 70px;
+            }
+
+            .profile-avatar i {
+                font-size: 28px;
+            }
+
+            .tab-btn {
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+
+            .negotiate-btn {
+                width: 100%;
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ride-card {
+                padding: 20px 15px;
+            }
+
+            .route {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .route-arrow {
+                transform: rotate(90deg);
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .companion-details {
+                padding: 12px;
+            }
+
+            .card-content {
+                gap: 15px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Bar -->
+    <header class="header-bar">
+        <h1>My Rides</h1>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="showTab('confirmed')">Confirmed Rides</button>
+            <button class="tab-btn" onclick="showTab('pending')">Not Confirmed</button>
+        </div>
+
+        <!-- Confirmed Rides Tab -->
+        <div id="confirmed-tab" class="tab-content active">
+            <div class="rides-container confirmed-rides">
+                
+                <!-- Confirmed Ride 1 -->
+                <div class="ride-card" onclick="toggleCompanions(this)">
+                    <div class="card-content">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="ride-info">
+                            <div class="route">
+                                <span class="route-point">Mumbai Central</span>
+                                <i class="fas fa-arrow-right route-arrow"></i>
+                                <span class="route-point">Pune Station</span>
+                            </div>
+                            <div class="datetime">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>August 15, 2025 | 10:30 AM</span>
+                            </div>
+                            <div class="expand-indicator">
+                                <span>View companions</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            
+                            <div class="companions-container">
+                                <div class="companions-title">
+                                    <i class="fas fa-users"></i>
+                                    Travel Companions (3)
+                                </div>
+                                
+                                <!-- Companion 1 -->
+                                <div class="companion-details">
+                                    <div class="companion-name">
+                                        <i class="fas fa-user" style="margin-right: 8px; color: #00f5a0;"></i>
+                                        Rahul Sharma
+                                    </div>
+                                    <div class="companion-contact">
+                                        <i class="fas fa-phone" style="margin-right: 8px; color: #ff6b9d;"></i>
+                                        +91 98765 43210
+                                    </div>
+                                    <div class="companion-education">
+                                        <i class="fas fa-graduation-cap" style="margin-right: 8px; color: #4facfe;"></i>
+                                        Computer Engineering, 3rd Year
+                                    </div>
+                                </div>
+
+                                <!-- Companion 2 -->
+                                <div class="companion-details">
+                                    <div class="companion-name">
+                                        <i class="fas fa-user" style="margin-right: 8px; color: #00f5a0;"></i>
+                                        Priya Patel
+                                    </div>
+                                    <div class="companion-contact">
+                                        <i class="fas fa-phone" style="margin-right: 8px; color: #ff6b9d;"></i>
+                                        +91 87654 32109
+                                    </div>
+                                    <div class="companion-education">
+                                        <i class="fas fa-graduation-cap" style="margin-right: 8px; color: #4facfe;"></i>
+                                        MBA Finance, 2nd Year
+                                    </div>
+                                </div>
+
+                                <!-- Companion 3 -->
+                                <div class="companion-details">
+                                    <div class="companion-name">
+                                        <i class="fas fa-user" style="margin-right: 8px; color: #00f5a0;"></i>
+                                        Amit Kumar
+                                    </div>
+                                    <div class="companion-contact">
+                                        <i class="fas fa-phone" style="margin-right: 8px; color: #ff6b9d;"></i>
+                                        +91 76543 21098
+                                    </div>
+                                    <div class="companion-education">
+                                        <i class="fas fa-graduation-cap" style="margin-right: 8px; color: #4facfe;"></i>
+                                        Mechanical Engineering, 4th Year
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirmed Ride 2 -->
+                <div class="ride-card" onclick="toggleCompanions(this)">
+                    <div class="card-content">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="ride-info">
+                            <div class="route">
+                                <span class="route-point">Delhi Airport</span>
+                                <i class="fas fa-arrow-right route-arrow"></i>
+                                <span class="route-point">Gurgaon Sector 14</span>
+                            </div>
+                            <div class="datetime">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>August 16, 2025 | 2:15 PM</span>
+                            </div>
+                            <div class="expand-indicator">
+                                <span>View companions</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            
+                            <div class="companions-container">
+                                <div class="companions-title">
+                                    <i class="fas fa-users"></i>
+                                    Travel Companions (2)
+                                </div>
+                                
+                                <!-- Companion 1 -->
+                                <div class="companion-details">
+                                    <div class="companion-name">
+                                        <i class="fas fa-user" style="margin-right: 8px; color: #00f5a0;"></i>
+                                        Sneha Gupta
+                                    </div>
+                                    <div class="companion-contact">
+                                        <i class="fas fa-phone" style="margin-right: 8px; color: #ff6b9d;"></i>
+                                        +91 91234 56789
+                                    </div>
+                                    <div class="companion-education">
+                                        <i class="fas fa-graduation-cap" style="margin-right: 8px; color: #4facfe;"></i>
+                                        Data Science, 1st Year
+                                    </div>
+                                </div>
+
+                                <!-- Companion 2 -->
+                                <div class="companion-details">
+                                    <div class="companion-name">
+                                        <i class="fas fa-user" style="margin-right: 8px; color: #00f5a0;"></i>
+                                        Vikram Singh
+                                    </div>
+                                    <div class="companion-contact">
+                                        <i class="fas fa-phone" style="margin-right: 8px; color: #ff6b9d;"></i>
+                                        +91 98123 45678
+                                    </div>
+                                    <div class="companion-education">
+                                        <i class="fas fa-graduation-cap" style="margin-right: 8px; color: #4facfe;"></i>
+                                        Electrical Engineering, 2nd Year
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirmed Ride 3 -->
+                <div class="ride-card" onclick="toggleCompanions(this)">
+                    <div class="card-content">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="ride-info">
+                            <div class="route">
+                                <span class="route-point">Chennai Central</span>
+                                <i class="fas fa-arrow-right route-arrow"></i>
+                                <span class="route-point">Coimbatore</span>
+                            </div>
+                            <div class="datetime">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>August 17, 2025 | 9:00 AM</span>
+                            </div>
+                            <div class="expand-indicator">
+                                <span>View companions</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            
+                            <div class="companions-container">
+                                <div class="companions-title">
+                                    <i class="fas fa-users"></i>
+                                    Travel Companions (1)
+                                </div>
+                                
+                                <!-- Companion 1 -->
+                                <div class="companion-details">
+                                    <div class="companion-name">
+                                        <i class="fas fa-user" style="margin-right: 8px; color: #00f5a0;"></i>
+                                        Arjun Nair
+                                    </div>
+                                    <div class="companion-contact">
+                                        <i class="fas fa-phone" style="margin-right: 8px; color: #ff6b9d;"></i>
+                                        +91 95678 12345
+                                    </div>
+                                    <div class="companion-education">
+                                        <i class="fas fa-graduation-cap" style="margin-right: 8px; color: #4facfe;"></i>
+                                        Civil Engineering, 3rd Year
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Not Confirmed Rides Tab -->
+        <div id="pending-tab" class="tab-content">
+            <div class="rides-container">
+                <!-- Sample Pending Ride 1 -->
+                <div class="ride-card">
+                    <div class="card-content pending">
+                        <div class="ride-info">
+                            <div class="route">
+                                <span class="route-point">Bangalore Electronic City</span>
+                                <i class="fas fa-arrow-right route-arrow"></i>
+                                <span class="route-point">Chennai OMR</span>
+                            </div>
+                            <div class="datetime">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>August 18, 2025 | 8:00 AM</span>
+                            </div>
+                        </div>
+                        <button class="negotiate-btn" onclick="negotiateRide(this, event)">
+                            <i class="fas fa-handshake" style="margin-right: 8px;"></i>
+                            Negotiate
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sample Pending Ride 2 -->
+                <div class="ride-card">
+                    <div class="card-content pending">
+                        <div class="ride-info">
+                            <div class="route">
+                                <span class="route-point">Hyderabad HITEC City</span>
+                                <i class="fas fa-arrow-right route-arrow"></i>
+                                <span class="route-point">Vijayawada</span>
+                            </div>
+                            <div class="datetime">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>August 20, 2025 | 6:30 PM</span>
+                            </div>
+                        </div>
+                        <button class="negotiate-btn" onclick="negotiateRide(this, event)">
+                            <i class="fas fa-handshake" style="margin-right: 8px;"></i>
+                            Negotiate
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sample Pending Ride 3 -->
+                <div class="ride-card">
+                    <div class="card-content pending">
+                        <div class="ride-info">
+                            <div class="route">
+                                <span class="route-point">Kolkata Sealdah</span>
+                                <i class="fas fa-arrow-right route-arrow"></i>
+                                <span class="route-point">Durgapur</span>
+                            </div>
+                            <div class="datetime">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>August 22, 2025 | 11:45 AM</span>
+                            </div>
+                        </div>
+                        <button class="negotiate-btn" onclick="negotiateRide(this, event)">
+                            <i class="fas fa-handshake" style="margin-right: 8px;"></i>
+                            Negotiate
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked tab button
+            event.target.classList.add('active');
+        }
+
+        // Toggle companions details for confirmed rides
+        function toggleCompanions(cardElement) {
+            const companionsContainer = cardElement.querySelector('.companions-container');
+            const expandIndicator = cardElement.querySelector('.expand-indicator span');
+            
+            // Toggle expanded state
+            cardElement.classList.toggle('expanded');
+            companionsContainer.classList.toggle('expanded');
+            
+            // Update indicator text
+            if (cardElement.classList.contains('expanded')) {
+                expandIndicator.textContent = 'Hide companions';
+            } else {
+                expandIndicator.textContent = 'View companions';
+            }
+        }
+
+        // Negotiate ride functionality - Now clickable
+        function negotiateRide(button, event) {
+            // Prevent event bubbling to parent elements
+            event.stopPropagation();
+            
+            const card = button.closest('.ride-card');
+            const route = card.querySelector('.route').textContent.trim();
+            const datetime = card.querySelector('.datetime span').textContent.trim();
+            
+            // Create custom glassmorphism alert
+            showCustomAlert(`Negotiation request sent for:<br><strong>${route}</strong><br>${datetime}<br><br>You will be notified when the ride owner responds.`);
+            
+            // Change button state
+            button.innerHTML = '<i class="fas fa-clock" style="margin-right: 8px;"></i>Negotiating...';
+            button.classList.add('negotiating');
+            button.disabled = true;
+            
+            // Simulate response after 3 seconds (for demo)
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i>Request Sent';
+                showCustomAlert(`Your negotiation request for ${route} has been sent successfully!`);
+            }, 3000);
+        }
+
+        // Custom glassmorphism alert
+        function showCustomAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(255, 255, 255, 0.1);
+                    backdrop-filter: blur(25px);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 25px;
+                    padding: 35px;
+                    color: white;
+                    text-align: center;
+                    z-index: 1000;
+                    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+                    animation: fadeInScale 0.4s ease;
+                    max-width: 90%;
+                    max-width: 450px;
+                ">
+                    <div style="margin-bottom: 25px; font-size: 1.1rem; line-height: 1.6;">${message}</div>
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        padding: 15px 30px;
+                        background: rgba(255, 255, 255, 0.2);
+                        backdrop-filter: blur(10px);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        border-radius: 15px;
+                        color: white;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-size: 1rem;
+                        font-weight: 300;
+                    " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" 
+                       onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
+                        OK
+                    </button>
+                </div>
+                <style>
+                    @keyframes fadeInScale {
+                        from { 
+                            opacity: 0; 
+                            transform: translate(-50%, -50%) scale(0.8); 
+                        }
+                        to { 
+                            opacity: 1; 
+                            transform: translate(-50%, -50%) scale(1); 
+                        }
+                    }
+                </style>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            // Auto remove after 8 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 8000);
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add staggered animation to ride cards
+            const cards = document.querySelectorAll('.ride-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'slideInUp 0.6s ease forwards';
+            });
+        });
+
+        // Add slide in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }  
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
