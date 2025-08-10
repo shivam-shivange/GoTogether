@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideShare - Available Rides</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 50%, #0f172a 100%);
+            --secondary-gradient: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --form-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --input-bg: rgba(30, 41, 59, 0.8);
+            --success-color: #3b82f6;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-dark: #0f172a;
+            --bg-light: rgba(59, 130, 246, 0.1);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --shadow-glass: 0 8px 32px 0 rgba(30, 58, 138, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, 
+                #1e3a8a 0%,     /* Blue */
+                #1e1b4b 25%,    /* Dark Blue */
+                #0f172a 50%,    /* Black */
+                #1e40af 75%,    /* Medium Blue */
+                #ffffff 100%);  /* White */
+            min-height: 100vh;
+            padding: 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:rgba(59,130,246,0.3)"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.1)"/></radialGradient></defs><circle cx="200" cy="200" r="150" fill="url(%23a)"/><circle cx="800" cy="300" r="100" fill="url(%23a)"/><circle cx="600" cy="700" r="200" fill="url(%23a)"/><circle cx="100" cy="600" r="80" fill="url(%23a)"/><circle cx="900" cy="800" r="120" fill="url(%23a)"/></svg>') no-repeat center center;
+            background-size: cover;
+            pointer-events: none;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(59,130,246,0.1)"/><circle cx="75" cy="25" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="25" cy="75" r="0.7" fill="rgba(30,58,138,0.08)"/><circle cx="75" cy="75" r="1.2" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(-10px) rotate(-1deg); }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--form-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px 0 rgba(15, 23, 42, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .route-info {
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .route-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .location {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .route-arrow {
+            color: var(--success-color);
+            font-size: 1.5rem;
+        }
+
+        .route-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .results-count {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Ride Cards */
+        .rides-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .ride-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px 0 rgba(30, 41, 59, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ride-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .ride-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 40px 0 rgba(30, 41, 59, 0.8),
+                0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .profile-picture {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .departure-time {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .time-badge {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--success-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* Action Buttons - Now on the right and smaller */
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-left: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            white-space: nowrap;
+            min-width: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: rgba(30, 58, 138, 0.6);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+            background: rgba(30, 58, 138, 0.7);
+        }
+
+        .btn-secondary {
+            background: rgba(30, 41, 59, 0.6);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Ride Details Icons */
+        .ride-details {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .detail-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--success-color);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .detail-text {
+            font-weight: 500;
+        }
+
+        /* Ride Info Section */
+        .ride-info {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ride-info-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            font-style: italic;
+            padding: 0.75rem 1rem;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 12px;
+            border-left: 3px solid rgba(59, 130, 246, 0.6);
+        }
+
+        .ride-info-icon {
+            color: var(--success-color);
+            margin-right: 0.5rem;
+        }
+
+        /* No rides message */
+        .no-rides {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-rides-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Confirmation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--form-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 60px 0 rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--success-color);
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-text {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Success notification */
+        .glass-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 58, 138, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 
+                0 8px 32px rgba(30, 58, 138, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.3s ease-out;
+            max-width: 300px;
+            font-weight: 500;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .header {
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .route-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .location {
+                font-size: 1.25rem;
+            }
+
+            .ride-card {
+                padding: 1rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .user-section {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .card-actions {
+                flex-direction: row;
+                justify-content: center;
+                margin-left: 0;
+                gap: 1rem;
+            }
+
+            .btn {
+                flex: 1;
+                min-width: auto;
+            }
+
+            .ride-details {
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ride-details {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .detail-item {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Route Information -->
+        <div class="header">
+            <button class="back-btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+
+            <div class="route-info">
+                <div class="route-header">
+                    <span class="location" id="fromLocation">PCCOE Campus</span>
+                    <i class="fas fa-arrow-right route-arrow"></i>
+                    <span class="location" id="toLocation">Pune Railway Station</span>
+                </div>
+                <div class="route-date" id="routeDate">
+                    <i class="fas fa-calendar-alt" style="margin-right: 5px;"></i>
+                    Monday, August 11, 2025
+                </div>
+                <div class="results-count" id="resultsCount">
+                    <i class="fas fa-car" style="margin-right: 5px;"></i>
+                    2 rides available
+                </div>
+            </div>
+        </div>
+
+        <!-- Rides List -->
+        <div class="rides-container" id="ridesContainer">
+            <!-- Demo Ride 1 -->
+            <div class="ride-card" data-ride-id="1">
+                <div class="card-header">
+                    <div class="user-section">
+                        <div class="profile-picture">
+                            AR
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Arjun Sharma</div>
+                            <div class="departure-time">
+                                <i class="fas fa-clock"></i>
+                                <span>Aug 11, 2025</span>
+                                <span class="time-badge">9:30 AM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary confirm-ride-btn" data-rider="Arjun Sharma" data-time="9:30 AM">
+                            <i class="fas fa-check" style="margin-right: 6px;"></i>
+                            Confirm
+                        </button>
+                        <button class="btn btn-secondary negotiate-btn" data-rider="Arjun Sharma">
+                            <i class="fas fa-comments" style="margin-right: 6px;"></i>
+                            Chat
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ride-details">
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="detail-text">
+                            <strong>3</strong> seats
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-suitcase"></i>
+                        </div>
+                        <div class="detail-text">
+                            Luggage space
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="detail-text">
+                            Any gender
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ride-info">
+                    <div class="ride-info-content">
+                        <i class="fas fa-info-circle ride-info-icon"></i>
+                        I'll be driving a white Honda City. Will pick up from main college gate and drop at platform 1. Please be on time as I have a train to catch at 10:15 AM. Contact me on WhatsApp for coordination.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Ride 2 -->
+            <div class="ride-card" data-ride-id="2">
+                <div class="card-header">
+                    <div class="user-section">
+                        <div class="profile-picture">
+                            PM
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Priya Mehta</div>
+                            <div class="departure-time">
+                                <i class="fas fa-clock"></i>
+                                <span>Aug 11, 2025</span>
+                                <span class="time-badge">2:15 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary confirm-ride-btn" data-rider="Priya Mehta" data-time="2:15 PM">
+                            <i class="fas fa-check" style="margin-right: 6px;"></i>
+                            Confirm
+                        </button>
+                        <button class="btn btn-secondary negotiate-btn" data-rider="Priya Mehta">
+                            <i class="fas fa-comments" style="margin-right: 6px;"></i>
+                            Chat
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ride-details">
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="detail-text">
+                            <strong>2</strong> seats
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="detail-text">
+                            No luggage
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-venus"></i>
+                        </div>
+                        <div class="detail-text">
+                            Female only
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No ride info for this card - will not display anything -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="modal-title">Confirm Ride Booking</div>
+                <div class="modal-text" id="modalText">
+                    Are you sure you want to book this ride with <strong id="riderName"></strong> at <strong id="rideTime"></strong>?
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelConfirmation">
+                    <i class="fas fa-times" style="margin-right: 8px;"></i>
+                    Cancel
+                </button>
+                <button class="btn btn-primary" id="confirmBooking">
+                    <i class="fas fa-check" style="margin-right: 8px;"></i>
+                    Confirm Booking
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class RideListings {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateRouteInfo();
+            }
+
+            bindEvents() {
+                // Back button
+                document.getElementById('backBtn').addEventListener('click', () => {
+                    window.history.back();
+                });
+
+                // Confirm ride buttons
+                document.querySelectorAll('.confirm-ride-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const rider = e.target.closest('.confirm-ride-btn').dataset.rider;
+                        const time = e.target.closest('.confirm-ride-btn').dataset.time;
+                        this.showConfirmationModal(rider, time);
+                    });
+                });
+
+                // Negotiate buttons
+                document.querySelectorAll('.negotiate-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const rider = e.target.closest('.negotiate-btn').dataset.rider;
+                        this.handleNegotiation(rider);
+                    });
+                });
+
+                // Modal events
+                document.getElementById('cancelConfirmation').addEventListener('click', () => {
+                    this.hideConfirmationModal();
+                });
+
+                document.getElementById('confirmBooking').addEventListener('click', () => {
+                    this.confirmBooking();
+                });
+
+                // Close modal on background click
+                document.getElementById('confirmationModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'confirmationModal') {
+                        this.hideConfirmationModal();
+                    }
+                });
+
+                // Close modal on ESC key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.hideConfirmationModal();
+                    }
+                });
+            }
+
+            updateRouteInfo() {
+                // You would typically get this data from URL parameters or passed data
+                const urlParams = new URLSearchParams(window.location.search);
+                const fromLocation = urlParams.get('from') || 'PCCOE Campus';
+                const toLocation = urlParams.get('to') || 'Pune Railway Station';
+                const date = urlParams.get('date') || 'Monday, August 11, 2025';
+
+                document.getElementById('fromLocation').textContent = fromLocation;
+                document.getElementById('toLocation').textContent = toLocation;
+                document.getElementById('routeDate').innerHTML = `
+                    <i class="fas fa-calendar-alt" style="margin-right: 5px;"></i>
+                    ${date}
+                `;
+
+                // Update page title
+                document.title = `RideShare - ${fromLocation} to ${toLocation}`;
+            }
+
+            showConfirmationModal(rider, time) {
+                document.getElementById('riderName').textContent = rider;
+                document.getElementById('rideTime').textContent = time;
+                document.getElementById('confirmationModal').classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            hideConfirmationModal() {
+                document.getElementById('confirmationModal').classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+
+            async confirmBooking() {
+                const confirmBtn = document.getElementById('confirmBooking');
+                const rider = document.getElementById('riderName').textContent;
+                
+                try {
+                    // Show loading state
+                    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Booking...';
+                    confirmBtn.disabled = true;
+
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    this.hideConfirmationModal();
+                    this.showSuccessNotification(`🎉 Ride booked successfully with ${rider}! Check your messages for details.`);
+
+                    // You would typically redirect to bookings page or update the UI
+                    setTimeout(() => {
+                        alert('Redirecting to your bookings...');
+                    }, 2000);
+
+                } catch (error) {
+                    alert('Failed to book ride. Please try again.');
+                } finally {
+                    confirmBtn.innerHTML = '<i class="fas fa-check" style="margin-right: 8px;"></i>Confirm Booking';
+                    confirmBtn.disabled = false;
+                }
+            }
+
+            handleNegotiation(rider) {
+                // Show notification and redirect to chat
+                this.showSuccessNotification(`Opening chat with ${rider}...`);
+                
+                setTimeout(() => {
+                    // You would redirect to chat page with ride details
+                    alert(`Redirecting to chat with ${rider}. Current ride details will be shared.`);
+                    // window.location.href = `/chat?rider=${encodeURIComponent(rider)}&ride=${currentRideId}`;
+                }, 1000);
+            }
+
+            showSuccessNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'glass-notification';
+                
+                notification.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOutRight 0.3s ease-in';
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+
+            // Method to add more rides dynamically (for future use)
+            addRide(rideData) {
+                const ridesContainer = document.getElementById('ridesContainer');
+                const rideCard = this.createRideCard(rideData);
+                ridesContainer.appendChild(rideCard);
+                this.updateResultsCount();
+            }
+
+            createRideCard(rideData) {
+                // Implementation for creating ride cards dynamically
+                // This would be used when loading rides from an API
+            }
+
+            updateResultsCount() {
+                const rideCards = document.querySelectorAll('.ride-card');
+                const count = rideCards.length;
+                document.getElementById('resultsCount').innerHTML = `
+                    <i class="fas fa-car" style="margin-right: 5px;"></i>
+                    ${count} ride${count !== 1 ? 's' : ''} available
+                `;
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            new RideListings();
+        });
+    </script>
+</body>
+</html>
