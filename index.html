@@ -285,22 +285,6 @@
             cursor: not-allowed;
         }
 
-        .password-requirements {
-            margin-top: 0.5rem;
-            padding: 0.75rem;
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 12px;
-            border-left: 4px solid rgba(245, 158, 11, 0.8);
-        }
-
-        .password-requirements small {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.8rem;
-            line-height: 1.4;
-        }
-
         .strength-indicator {
             margin-top: 0.5rem;
             height: 4px;
@@ -608,6 +592,44 @@
             max-width: 300px;
             font-weight: 500;
         }
+
+        .terms-popup {
+            display: none;
+            position: fixed;              /* Stays fixed in viewport */
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.6);
+            overflow-y: auto;             /* Enable scroll for popup content if content exceeds viewport */
+        }
+
+        .terms-content {
+            position: absolute;
+            top: 50%;                     /* Center vertically */
+            left: 50%;                    /* Center horizontally */
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 24px 28px;
+            width: 90vw;
+            max-width: 540px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 22px;
+            color: #888;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -656,24 +678,7 @@
                         <span class="error-message" id="emailError"></span>
                     </div>
 
-                    <div class="form-group" id="otpSection" style="display: none;">
-                        <label for="otp">Enter OTP *</label>
-                        <div class="otp-container">
-                            <div class="input-wrapper">
-                                <input type="text" id="otp" name="otp" placeholder="Enter 6-digit OTP" maxlength="6">
-                                <i class="fas fa-shield-alt input-icon"></i>
-                            </div>
-                            <button type="button" id="resendOtp">Resend</button>
-                        </div>
-                        <span class="error-message" id="otpError"></span>
-                        <span class="success-message" id="otpSuccess"></span>
-                        <div id="verificationBadge" style="display: none;" class="verification-badge">
-                            <i class="fas fa-check-circle"></i>
-                            Email Verified
-                        </div>
-                    </div>
-
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="branch">Branch/Department *</label>
                         <div class="input-wrapper">
                             <select id="branch" name="branch" required>
@@ -692,7 +697,7 @@
                             <i class="fas fa-graduation-cap input-icon"></i>
                         </div>
                         <span class="error-message" id="branchError"></span>
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
                         <label for="college">College *</label>
@@ -731,12 +736,6 @@
                             <input type="password" id="password" name="password" required>
                             <i class="fas fa-lock input-icon"></i>
                         </div>
-                        <div class="password-requirements">
-                            <small>Password must be at least 8 characters with uppercase, lowercase, number and special character</small>
-                        </div>
-                        <div class="strength-indicator">
-                            <div class="strength-bar" id="strengthBar"></div>
-                        </div>
                         <span class="error-message" id="passwordError"></span>
                     </div>
 
@@ -753,6 +752,32 @@
                         <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
                         Send OTP
                     </button>
+
+                    <div class="form-group" id="otpSection" style="display: none;">
+                        <label for="otp">Enter OTP *</label>
+                        <div class="otp-container">
+                            <div class="input-wrapper">
+                                <input type="text" id="otp" name="otp" placeholder="Enter 6-digit OTP" maxlength="6">
+                                <i class="fas fa-shield-alt input-icon"></i>
+                            </div>
+                            <button type="button" id="resendOtp">Resend</button>
+                        </div>
+                        <span class="error-message" id="otpError"></span>
+                        <span class="success-message" id="otpSuccess"></span>
+                        <div id="verificationBadge" style="display: none;" class="verification-badge">
+                            <i class="fas fa-check-circle"></i>
+                            Email Verified
+                        </div>
+                    </div>
+
+                    <div class="form-group terms">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="termsCheckbox" name="terms" required>
+                            I agree to the <a href="#" id="viewTerms">Terms & Conditions</a>
+                        </label>
+                        <span class="error-message" id="termsError"></span>
+                    </div>
+
                     <button type="submit" id="signupBtn" class="btn primary" disabled>
                         <i class="fas fa-user-plus" style="margin-right: 8px;"></i>
                         Create Account
@@ -786,13 +811,6 @@
                         <span class="error-message" id="signinPasswordError"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="rememberMe" name="rememberMe">
-                            Remember me for 30 days
-                        </label>
-                    </div>
-
                     <button type="submit" class="btn primary">
                         <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
                         Sign In
@@ -803,6 +821,23 @@
                     <p><a href="#" id="forgotPassword">Forgot Password?</a></p>
                     <p>New to RideShare? <a href="#" id="showSignup">Create Account</a></p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Terms Popup -->
+        <div id="termsPopup" class="terms-popup">
+            <div class="terms-content">
+                <span class="close-btn" id="closeTerms">&times;</span>
+                <h2 style="color: #1d4ed8;">Terms & Conditions</h2>
+                <p>
+                    Welcome to RideShare! By using our service, you agree to the following terms:
+                    <br><br>
+                    1. You are responsible for your account security.<br>
+                    2. We are not liable for disputes between riders/drivers.<br>
+                    3. All rides must comply with local laws.<br>
+                    4. Your data will be protected according to our policy.<br>
+                    5. Violation of terms can lead to account termination.
+                </p>
             </div>
         </div>
     </div>
@@ -864,7 +899,6 @@
 
                 document.getElementById('password').addEventListener('input', () => {
                     this.validatePassword();
-                    this.updatePasswordStrength();
                 });
 
                 document.getElementById('confirmPassword').addEventListener('input', () => {
@@ -876,10 +910,29 @@
                     e.preventDefault();
                     alert('Forgot password functionality would be implemented here.');
                 });
+
+                document.getElementById('viewTerms').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('termsPopup').style.display = 'block';
+                });
+
+                document.getElementById('closeTerms').addEventListener('click', () => {
+                    document.getElementById('termsPopup').style.display = 'none';
+                });
+
+                window.addEventListener('click', (event) => {
+                    if (event.target === document.getElementById('termsPopup')) {
+                        document.getElementById('termsPopup').style.display = 'none';
+                    }
+                });
+
+                document.getElementById('termsCheckbox').addEventListener('change', () => {
+                    this.updateSignupButtonState();
+                });
             }
 
             setupFormValidation() {
-                const requiredFields = ['name', 'gender', 'branch', 'college', 'contact'];
+                const requiredFields = ['name', 'gender', 'college', 'contact'];
                 
                 requiredFields.forEach(field => {
                     document.getElementById(field).addEventListener('blur', () => {
@@ -950,44 +1003,21 @@
                 const password = document.getElementById('password').value;
                 const passwordError = document.getElementById('passwordError');
                 
-                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])[A-Za-z]{8,}$/;
                 
                 if (!password) {
                     passwordError.textContent = 'Password is required';
                     return false;
                 }
 
-                if (!passwordRegex.test(password)) {
-                    passwordError.textContent = 'Password must be at least 8 characters with uppercase, lowercase, number and special character';
+                if (password.length<8) {
+                    passwordError.textContent = 'Password must be at least 8 characters.';
                     return false;
                 }
 
                 passwordError.textContent = '';
                 return true;
-            }
-
-            updatePasswordStrength() {
-                const password = document.getElementById('password').value;
-                const strengthBar = document.getElementById('strengthBar');
-                
-                let strength = 0;
-                const checks = [
-                    /.{8,}/, // At least 8 characters
-                    /[a-z]/, // Lowercase
-                    /[A-Z]/, // Uppercase
-                    /\d/,    // Number
-                    /[@$!%*?&]/ // Special character
-                ];
-
-                checks.forEach(check => {
-                    if (check.test(password)) strength++;
-                });
-
-                const percentage = (strength / checks.length) * 100;
-                const colors = ['#ef4444', '#f59e0b', '#eab308', '#84cc16', '#3b82f6'];
-                
-                strengthBar.style.width = `${percentage}%`;
-                strengthBar.style.backgroundColor = colors[Math.min(strength - 1, 4)] || '#e5e7eb';
             }
 
             validateConfirmPassword() {
@@ -1197,7 +1227,7 @@
             }
 
             validateAllFields() {
-                const fields = ['name', 'gender', 'branch', 'college', 'contact'];
+                const fields = ['name', 'gender', 'college', 'contact'];
                 let isValid = true;
 
                 fields.forEach(field => {
@@ -1213,6 +1243,14 @@
                     document.getElementById('otpError').style.color = '#ff6b6b';
                     document.getElementById('otpError').textContent = 'Please verify your email first';
                     isValid = false;
+                }
+
+                const termsCheckbox = document.getElementById('termsCheckbox');
+                if (!termsCheckbox.checked) {
+                    document.getElementById('termsError').textContent = 'You must agree to the terms';
+                    isValid = false;
+                } else {
+                    document.getElementById('termsError').textContent = '';
                 }
 
                 return isValid;
